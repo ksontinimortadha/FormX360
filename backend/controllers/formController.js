@@ -106,7 +106,7 @@ exports.getFormById = async (req, res) => {
 // Update a Form
 exports.updateForm = async (req, res) => {
   const { id } = req.params;
-  const { title, description, field_order, fields } = req.body;
+  const { title, description, field_order = [], fields = [], values } = req.body;
 
   try {
     // Log to verify all received data
@@ -116,20 +116,54 @@ exports.updateForm = async (req, res) => {
       description,
       field_order,
       fields,
+      values,
     });
+
+    if (!Array.isArray(fields)) {
+      return res
+        .status(400)
+        .json({ message: "Invalid fields format. Expected an array." });
+    }
 
     // Validate and ensure all fields contain a 'type'
     fields.forEach((field, index) => {
       if (!field.type) {
         console.warn(`Missing type for field at index ${index}`, field);
       }
+
+      // Ensure options are properly handled for 'checkbox-group', 'radio-group', and 'select'
+      if (["checkbox-group", "radio-group", "select"].includes(field.type)) {
+        field.options = field.options || []; // Ensure options exist
+
+        field.options = field.options.map((option) => ({
+          label: option.label || option, // Use provided label or default to option value
+          value: option.value || option, // Use provided value or default
+          selected: option.selected ?? false, // Ensure selected is explicitly set
+        }));
+      }
+
+      // Handle field validation rules, ensuring they are only set when relevant
+      if (field.validation_rules) {
+        field.validation_rules = {
+          ...field.validation_rules,
+          min_length: field.validation_rules.min_length ?? undefined,
+          max_length: field.validation_rules.max_length ?? undefined,
+          min_value: field.validation_rules.min_value ?? undefined,
+          max_value: field.validation_rules.max_value ?? undefined,
+          min_date: field.validation_rules.min_date ?? undefined,
+          max_date: field.validation_rules.max_date ?? undefined,
+        };
+      }
     });
 
-    // Find and update the form with all necessary properties
+    // Log the updated fields to verify correct structure
+    console.log("Updated fields:", fields);
+
+    // Find and update the form, ensuring arrays are replaced properly
     const updatedForm = await Form.findByIdAndUpdate(
       id,
-      { title, description, field_order, fields }, // Update everything
-      { new: true } // Return the updated form
+      { title, description, field_order, fields, values },
+      { new: true } // Return updated form & validate fields
     );
 
     // Handle form not found scenario
@@ -148,9 +182,6 @@ exports.updateForm = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
-
-
-
 
 // Delete a Form
 exports.deleteForm = async (req, res) => {
