@@ -7,7 +7,7 @@ require("dotenv").config();
 const app = express();
 
 // Middleware
-app.use(cors({ origin: "https://formx360.onrender.com" }));
+app.use(cors({ origin: "https://form-x360-kappa.vercel.app" }));
 
 app.use(bodyParser.json());
 
