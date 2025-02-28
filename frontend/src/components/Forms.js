@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Button, Card, Modal } from "react-bootstrap";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaPencilAlt, FaTrash, FaPlus } from "react-icons/fa";
 import axios from "axios";
@@ -58,18 +58,6 @@ function Forms() {
   };
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
-
-  const handleDeleteForm = async () => {
-    if (!formToEdit) return;
-    try {
-      await axios.delete(`http://localhost:5000/forms/${formToEdit._id}`);
-      toast.success("Form deleted successfully.");
-      setForms(forms.filter((form) => form._id !== formToEdit._id));
-      handleCloseDeleteModal();
-    } catch (error) {
-      toast.error("Failed to delete form.");
-    }
-  };
 
   return (
     <div>

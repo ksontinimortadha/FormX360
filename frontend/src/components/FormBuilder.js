@@ -12,13 +12,14 @@ import {
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
-import ProgressBarComponent from "./ProgressBarComponent"; // Import the new ProgressBar component
+import ProgressBarComponent from "./ProgressBarComponent";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./FormBuilder.css";
 import $ from "jquery";
 
 window.jQuery = $;
 window.$ = $;
+
 require("jquery-ui-sortable");
 require("formBuilder");
 
@@ -33,7 +34,7 @@ const FormBuilder = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [progress, setProgress] = useState(0); // Progress state
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const fetchFormData = async () => {
@@ -43,7 +44,7 @@ const FormBuilder = () => {
           `http://localhost:5000/forms/${formId}`
         );
         const form = response.data.form;
-
+        console.log("form",form)
         setFormData(form);
         setFormTitle(form.title || "Untitled Form");
         setFormDescription(form.description || "");
@@ -74,31 +75,72 @@ const FormBuilder = () => {
     };
 
     fetchFormData();
-  }, [formId,]);
+  }, [formId]);
 
-  const handleSaveForm = async () => {
-    try {
-      setIsSaving(true);
-      const updatedFields = JSON.parse(
-        $(fb.current).data("formBuilder").actions.getData("json", true)
-      );
+const handleSaveForm = async () => {
+  try {
+    setIsSaving(true);
 
-      await axios.put(`http://localhost:5000/forms/${formId}`, {
-        title: formTitle,
-        description: formDescription,
-        fields: updatedFields,
-      });
 
-      // Update progress to 100% when form is saved
-      setProgress(100);
-      alert("Form saved successfully!");
-    } catch (err) {
-      console.error("Error saving form:", err);
-      setError("Error saving form. Please try again.");
-    } finally {
-      setIsSaving(false);
+    // Get form data from formBuilder instance
+    const updatedFields = JSON.parse(
+      $(fb.current).data("formBuilder").actions.getData("json", true)
+    );
+
+    if (!Array.isArray(updatedFields)) {
+      setError("❌ Invalid form data. Please refresh and try again.");
+      return;
     }
-  };
+
+    // Process each field
+    updatedFields.forEach((field) => {
+      if (["checkbox-group", "radio-group", "select"].includes(field.type)) {
+        // Ensure options array exists
+        field.options = field.options || [];
+
+        // Standardize the structure of options
+        field.options = field.options.map((option) => ({
+          label: option.label || option, // Ensure label exists
+          value: option.value || option, // Ensure value exists
+          selected: option.selected ?? false, // Default to false if missing
+        }));
+      }
+
+      // Handle field validation rules
+      if (field.validation_rules) {
+        field.validation_rules = {
+          ...field.validation_rules,
+          min_length: field.validation_rules.min_length ?? undefined,
+          max_length: field.validation_rules.max_length ?? undefined,
+          min_value: field.validation_rules.min_value ?? undefined,
+          max_value: field.validation_rules.max_value ?? undefined,
+          min_date: field.validation_rules.min_date ?? undefined,
+          max_date: field.validation_rules.max_date ?? undefined,
+        };
+      }
+    });
+
+    // Log updated form data for debugging
+    console.log("Updated form fields:", updatedFields);
+
+    // Send updated form data to the backend
+    await axios.put(`http://localhost:5000/forms/${formId}`, {
+      title: formTitle,
+      description: formDescription,
+      fields: updatedFields,
+    });
+
+    // Show success notification (replace with a toast if using react-toastify)
+    setProgress(100);
+    alert("✅ Form saved successfully!");
+  } catch (err) {
+    console.error("Error saving form:", err);
+    setError("❌ Error saving form. Please try again.");
+  } finally {
+    setIsSaving(false);
+  }
+};
+
 
   const handleTitleChange = (e) => {
     setFormTitle(e.target.value);
@@ -109,7 +151,7 @@ const FormBuilder = () => {
   };
 
   const handleBackButtonClick = () => {
-    navigate("/forms"); // Navigate back to the forms page
+    navigate("/forms");
   };
 
   return (
@@ -140,7 +182,7 @@ const FormBuilder = () => {
               onClick={() => navigate(`/form-styling/${formId}`)}
               className="next-step-btn"
             >
-              Next Step - Style Form
+              Next Step - Style your Form
             </Button>
 
             <Card className="shadow-lg border-0 rounded-4 custom-card">
@@ -151,7 +193,9 @@ const FormBuilder = () => {
                       <Spinner animation="border" variant="primary" />
                     </div>
                   ) : error ? (
-                    <Alert variant="danger">{error}</Alert>
+                    <Alert variant="danger" className="w-100">
+                      {error}
+                    </Alert>
                   ) : (
                     <>
                       <Form.Control
@@ -161,18 +205,26 @@ const FormBuilder = () => {
                         className="form-title-input"
                         placeholder="Enter Form Title"
                         disabled={isSaving}
+                        style={{ width: "90%", height: "40px" }}
+                        aria-label="Form Title"
                       />
                       <Button
                         variant="outline-primary"
-                        className="ml-3"
                         onClick={handleSaveForm}
-                        disabled={isSaving}
+                        disabled={isSaving || !formTitle}
+                        style={{
+                          width: "10%",
+                          height: "40px",
+                          marginLeft: "10px",
+                        }} 
+                        aria-label="Save Form Title"
                       >
                         Save Title
                       </Button>
                     </>
                   )}
                 </div>
+
                 <div className="d-flex align-items-center mb-3">
                   <Form.Control
                     as="textarea"
@@ -182,20 +234,24 @@ const FormBuilder = () => {
                     className="form-description-input"
                     placeholder="Enter Form Description"
                     disabled={isSaving}
+                    style={{ width: "100%", height: "80px" }}
+                    aria-label="Form Description"
                   />
                   <Button
                     variant="outline-primary"
-                    className="ml-3"
                     onClick={handleSaveForm}
-                    disabled={isSaving}
+                    style={{ width: "15%", height: "80px", marginLeft: "5px" }}
+                    aria-label="Save Form Description"
                   >
                     Save Description
                   </Button>
                 </div>
+
                 <div className="guide-text mb-3">
                   <p>
-                    Use the form builder below to create your custom form. Drag
-                    and drop fields to customize your form's layout.
+                    Use the form builder below to easily design your form.<br/>
+                    Simply drag and drop fields to customize the layout and
+                    structure according to your needs.
                   </p>
                 </div>
               </Card.Body>

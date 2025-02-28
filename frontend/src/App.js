@@ -13,6 +13,7 @@ import FormBuilder from "./components/FormBuilder";
 import FormStylingPage from "./components/FormStylingPage";
 import Profile from "./components/Profile";
 import Security from "./components/Security";
+import PreviewPage from "./components/PreviewPage";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/forms" element={<Forms />} />
         <Route path="/form-builder/:formId" element={<FormBuilder />} />
         <Route path="/form-styling/:formId" element={<FormStylingPage />} />
+        <Route path="/preview/:formId" element={<PreviewPage />} />
       </Routes>
     </Router>
   );

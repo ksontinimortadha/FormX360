@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./FormStylingPage.css";
 import { useParams } from "react-router-dom";
-import FormPreview from "./FormPreview";
-import ThemeSelector from "./ThemeSelector";
+import { Card, Spinner, Alert } from "react-bootstrap";
 
-const FormStylingPage = () => {
+const PreviewPage = () => {
   const [formData, setFormData] = useState(null);
-  const [selectedTheme, setSelectedTheme] = useState("Minialist-white");
-  const [setIsDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [setSelectedField] = useState(null);
-  const [fieldStyles] = useState({});
-  const [setShowModal] = useState(false);
   const { formId } = useParams();
+  const [fieldStyles] = useState({});
 
   useEffect(() => {
     const fetchFormData = async () => {
@@ -31,18 +25,9 @@ const FormStylingPage = () => {
         setLoading(false);
       }
     };
+
     fetchFormData();
   }, [formId]);
-
-  const handleThemeChange = (theme) => {
-    setSelectedTheme(theme.className);
-    setIsDropdownOpen(false);
-  };
-
-  const handleFieldClick = (fieldIndex) => {
-    setSelectedField(fieldIndex);
-    setShowModal(true);
-  };
 
   const renderFormFields = () => {
     if (formData && formData.fields) {
@@ -65,7 +50,6 @@ const FormStylingPage = () => {
                         type="checkbox"
                         name={field.name}
                         value={option.value}
-                        onClick={() => handleFieldClick(index)}
                       />
                       {option.label}
                     </label>
@@ -78,29 +62,21 @@ const FormStylingPage = () => {
                         type="radio"
                         name={field.name}
                         value={option.value}
-                        onClick={() => handleFieldClick(index)}
                       />
                       {option.label}
                     </label>
                   ))}
               </div>
             ) : field.type === "button" ? (
-              <button
-                type="button"
-                style={fieldStyle}
-                onClick={() => handleFieldClick(index)}
-              >
+              <button type="button" style={fieldStyle}>
                 {field.label}
               </button>
             ) : field.type === "select" ? (
               <>
                 {field.label}
-                <select
-                  style={fieldStyle}
-                  onClick={() => handleFieldClick(index)}
-                >
-                  {field.options &&
-                    field.options.map((option, idx) => (
+                <select style={fieldStyle}>
+                  {field.values &&
+                    field.values.map((option, idx) => (
                       <option key={idx} value={option}>
                         {option.value}
                       </option>
@@ -113,7 +89,6 @@ const FormStylingPage = () => {
                 <textarea
                   placeholder={field.placeholder || field.label || "Enter text"}
                   style={fieldStyle}
-                  onClick={() => handleFieldClick(index)}
                 />
               </>
             ) : field.type === "autocomplete" ? (
@@ -126,26 +101,17 @@ const FormStylingPage = () => {
                   }
                   list="autocomplete-list"
                   style={fieldStyle}
-                  onClick={() => handleFieldClick(index)}
                 />
               </>
             ) : field.type === "file" ? (
               <>
                 {field.label}
-                <input
-                  type="file"
-                  style={fieldStyle}
-                  onClick={() => handleFieldClick(index)}
-                />
+                <input type="file" style={fieldStyle} />
               </>
             ) : field.type === "date" ? (
               <>
                 {field.label}
-                <input
-                  type="date"
-                  style={fieldStyle}
-                  onClick={() => handleFieldClick(index)}
-                />
+                <input type="date" style={fieldStyle} />
               </>
             ) : field.type === "hidden" ? (
               <>
@@ -157,9 +123,9 @@ const FormStylingPage = () => {
                 />
               </>
             ) : field.type === "header" ? (
-              <h2 onClick={() => handleFieldClick(index)}>{field.label}</h2>
+              <h2>{field.label}</h2>
             ) : field.type === "paragraph" ? (
-              <p onClick={() => handleFieldClick(index)}>{field.label}</p>
+              <p>{field.label}</p>
             ) : (
               <>
                 {field.label}
@@ -169,7 +135,6 @@ const FormStylingPage = () => {
                     field.placeholder || field.label || "Enter " + field.type
                   }
                   style={fieldStyle}
-                  onClick={() => handleFieldClick(index)}
                 />
               </>
             )}
@@ -190,27 +155,24 @@ const FormStylingPage = () => {
     return null;
   };
 
- 
   return (
-    <div className="form-styling-page">
-      <h1 className="text-center">Style Your Form</h1>
-
-      <div className="d-flex justify-content-between">
-        {/* Left side: Form Preview */}
-        <FormPreview
-          selectedTheme={selectedTheme}
-          loading={loading}
-          error={error}
-          renderFormFields={renderFormFields}
-        />
-        {/* Right side: Theme Selector */}
-        <ThemeSelector
-          selectedTheme={selectedTheme}
-          onThemeChange={handleThemeChange}
-        />
-      </div>
+    <div className="preview-page">
+      <h1 className="text-center">Form Preview</h1>
+      <Card>
+        <Card.Body>
+          {loading ? (
+            <div className="d-flex justify-content-center">
+              <Spinner animation="border" variant="primary" />
+            </div>
+          ) : error ? (
+            <Alert variant="danger">{error}</Alert>
+          ) : (
+            <div className="form-preview-content">{renderFormFields()}</div>
+          )}
+        </Card.Body>
+      </Card>
     </div>
   );
 };
 
-export default FormStylingPage;
+export default PreviewPage;

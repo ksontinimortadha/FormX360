@@ -65,13 +65,6 @@ function Dashboard() {
         `http://localhost:5000/companies/company/${companyId}/users`
       );
       setUsers(response.data.users);
-
-      // Log each user's role
-      response.data.users.forEach((user) => {
-        console.log(
-          `${user.firstName} ${user.lastName} has role: ${user.role}`
-        );
-      });
     } catch (error) {
       toast.error("Failed to fetch users.");
     }
@@ -92,7 +85,7 @@ function Dashboard() {
     navigate("/login");
   };
   const handleShow = () => setShowModal(true);
-  const handleClose = () => setShowModal(false); // Close Modal
+  const handleClose = () => setShowModal(false);
 
   const handleShowDeleteModal = () => setShowDeleteModal(true);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
@@ -114,7 +107,7 @@ function Dashboard() {
       if (response.status === 200) {
         setUsers((prevUsers) => [...prevUsers, response.data.newUser]);
         toast.success("User added successfully!");
-        handleClose(); // Close the modal after successful user creation
+        handleClose();
       }
     } catch (error) {
       toast.error("Failed to add user.");
@@ -140,17 +133,14 @@ function Dashboard() {
     };
 
     try {
-      // Send PUT request to backend with updated company details
       await axios.put(
         `http://localhost:5000/companies/company/${companyId}`,
         updatedCompany
       );
 
-      // Update the local state with the updated company details
       setCompanyDetails(updatedCompany);
       toast.success("Company updated successfully!");
 
-      // Close the modal after successful update
       handleCloseEditCompanyModal();
     } catch (error) {
       toast.error("Failed to update company.");
@@ -163,21 +153,13 @@ function Dashboard() {
 
   const handleDeleteCompany = async () => {
     try {
-      // Send DELETE request to the backend
       await axios.delete(
         `http://localhost:5000/companies/company/${companyId}`
       );
-
-      // Show success message
       toast.success("Company deleted successfully!");
-
-      // Remove the company ID from session storage
       sessionStorage.removeItem("companyId");
-
-      // Redirect the user to the dashboard after deletion
       navigate("/dashboard");
     } catch (error) {
-      // Handle error case
       toast.error("Failed to delete company.");
       console.error(
         "Error deleting company:",
@@ -233,7 +215,6 @@ function Dashboard() {
             {companyDetails ? (
               <>
                 {/* Company Details Section */}
-
                 <Row className="mb-4">
                   <Col md={12}>
                     <Card className="shadow-sm border-0 rounded-4">
@@ -400,7 +381,7 @@ function Dashboard() {
       <DeleteUserModal
         show={showDeleteModal}
         handleClose={handleCloseDeleteModal}
-        userToEdit={userToEdit} // Assuming this is a state or prop containing the user to delete
+        userToEdit={userToEdit} 
         handleDeleteUser={handleDeleteUser}
       />
       {/* Toast Notifications */}
