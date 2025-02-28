@@ -32,7 +32,7 @@ function Forms() {
     if (!companyId) return;
     try {
       const response = await axios.get(
-        `http://localhost:5000/forms/${companyId}/forms`
+        `https://formx360-backend.onrender.com/forms/${companyId}/forms`
       );
       setForms(response.data);
     } catch (error) {

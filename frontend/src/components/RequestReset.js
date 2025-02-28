@@ -25,7 +25,7 @@ function RequestReset() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/users/reset-password-request",
+        "https://formx360-backend.onrender.com/users/reset-password-request",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

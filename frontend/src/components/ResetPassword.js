@@ -47,7 +47,7 @@ function ResetPassword() {
     try {
       // Send the token, email, and new password in the request body
       const response = await fetch(
-        "http://localhost:5000/users/reset-password", // Update with actual backend URL
+        "https://formx360-backend.onrender.com/users/reset-password", // Update with actual backend URL
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

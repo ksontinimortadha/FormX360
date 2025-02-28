@@ -41,10 +41,10 @@ const FormBuilder = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:5000/forms/${formId}`
+          `https://formx360-backend.onrender.com/forms/${formId}`
         );
         const form = response.data.form;
-        console.log("form",form)
+        console.log("form", form);
         setFormData(form);
         setFormTitle(form.title || "Untitled Form");
         setFormDescription(form.description || "");
@@ -77,70 +77,68 @@ const FormBuilder = () => {
     fetchFormData();
   }, [formId]);
 
-const handleSaveForm = async () => {
-  try {
-    setIsSaving(true);
+  const handleSaveForm = async () => {
+    try {
+      setIsSaving(true);
 
+      // Get form data from formBuilder instance
+      const updatedFields = JSON.parse(
+        $(fb.current).data("formBuilder").actions.getData("json", true)
+      );
 
-    // Get form data from formBuilder instance
-    const updatedFields = JSON.parse(
-      $(fb.current).data("formBuilder").actions.getData("json", true)
-    );
+      if (!Array.isArray(updatedFields)) {
+        setError("❌ Invalid form data. Please refresh and try again.");
+        return;
+      }
 
-    if (!Array.isArray(updatedFields)) {
-      setError("❌ Invalid form data. Please refresh and try again.");
-      return;
+      // Process each field
+      updatedFields.forEach((field) => {
+        if (["checkbox-group", "radio-group", "select"].includes(field.type)) {
+          // Ensure options array exists
+          field.options = field.options || [];
+
+          // Standardize the structure of options
+          field.options = field.options.map((option) => ({
+            label: option.label || option, // Ensure label exists
+            value: option.value || option, // Ensure value exists
+            selected: option.selected ?? false, // Default to false if missing
+          }));
+        }
+
+        // Handle field validation rules
+        if (field.validation_rules) {
+          field.validation_rules = {
+            ...field.validation_rules,
+            min_length: field.validation_rules.min_length ?? undefined,
+            max_length: field.validation_rules.max_length ?? undefined,
+            min_value: field.validation_rules.min_value ?? undefined,
+            max_value: field.validation_rules.max_value ?? undefined,
+            min_date: field.validation_rules.min_date ?? undefined,
+            max_date: field.validation_rules.max_date ?? undefined,
+          };
+        }
+      });
+
+      // Log updated form data for debugging
+      console.log("Updated form fields:", updatedFields);
+
+      // Send updated form data to the backend
+      await axios.put(`https://formx360-backend.onrender.com/forms/${formId}`, {
+        title: formTitle,
+        description: formDescription,
+        fields: updatedFields,
+      });
+
+      // Show success notification (replace with a toast if using react-toastify)
+      setProgress(100);
+      alert("✅ Form saved successfully!");
+    } catch (err) {
+      console.error("Error saving form:", err);
+      setError("❌ Error saving form. Please try again.");
+    } finally {
+      setIsSaving(false);
     }
-
-    // Process each field
-    updatedFields.forEach((field) => {
-      if (["checkbox-group", "radio-group", "select"].includes(field.type)) {
-        // Ensure options array exists
-        field.options = field.options || [];
-
-        // Standardize the structure of options
-        field.options = field.options.map((option) => ({
-          label: option.label || option, // Ensure label exists
-          value: option.value || option, // Ensure value exists
-          selected: option.selected ?? false, // Default to false if missing
-        }));
-      }
-
-      // Handle field validation rules
-      if (field.validation_rules) {
-        field.validation_rules = {
-          ...field.validation_rules,
-          min_length: field.validation_rules.min_length ?? undefined,
-          max_length: field.validation_rules.max_length ?? undefined,
-          min_value: field.validation_rules.min_value ?? undefined,
-          max_value: field.validation_rules.max_value ?? undefined,
-          min_date: field.validation_rules.min_date ?? undefined,
-          max_date: field.validation_rules.max_date ?? undefined,
-        };
-      }
-    });
-
-    // Log updated form data for debugging
-    console.log("Updated form fields:", updatedFields);
-
-    // Send updated form data to the backend
-    await axios.put(`http://localhost:5000/forms/${formId}`, {
-      title: formTitle,
-      description: formDescription,
-      fields: updatedFields,
-    });
-
-    // Show success notification (replace with a toast if using react-toastify)
-    setProgress(100);
-    alert("✅ Form saved successfully!");
-  } catch (err) {
-    console.error("Error saving form:", err);
-    setError("❌ Error saving form. Please try again.");
-  } finally {
-    setIsSaving(false);
-  }
-};
-
+  };
 
   const handleTitleChange = (e) => {
     setFormTitle(e.target.value);
@@ -216,7 +214,7 @@ const handleSaveForm = async () => {
                           width: "10%",
                           height: "40px",
                           marginLeft: "10px",
-                        }} 
+                        }}
                         aria-label="Save Form Title"
                       >
                         Save Title
@@ -249,7 +247,8 @@ const handleSaveForm = async () => {
 
                 <div className="guide-text mb-3">
                   <p>
-                    Use the form builder below to easily design your form.<br/>
+                    Use the form builder below to easily design your form.
+                    <br />
                     Simply drag and drop fields to customize the layout and
                     structure according to your needs.
                   </p>

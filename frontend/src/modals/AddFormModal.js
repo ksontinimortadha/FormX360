@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 function AddFormModal({ show, handleClose, fetchForms, companyId }) {
   const [formTitle, setFormTitle] = useState("");
-  const [formDescription, setFormDescription] = useState(""); 
-  const navigate = useNavigate(); 
+  const [formDescription, setFormDescription] = useState("");
+  const navigate = useNavigate();
 
   const handleTitleChange = (e) => setFormTitle(e.target.value);
-  const handleDescriptionChange = (e) => setFormDescription(e.target.value); 
+  const handleDescriptionChange = (e) => setFormDescription(e.target.value);
 
   // Retrieve user ID from sessionStorage
   useEffect(() => {
@@ -36,7 +36,7 @@ function AddFormModal({ show, handleClose, fetchForms, companyId }) {
       }
 
       const response = await axios.post(
-        `http://localhost:5000/forms/${companyId}/forms`,
+        `https://formx360-backend.onrender.com/forms/${companyId}/forms`,
         {
           title: formTitle,
           description: formDescription, // Sending description
@@ -50,7 +50,7 @@ function AddFormModal({ show, handleClose, fetchForms, companyId }) {
 
       toast.success("Form added successfully!");
       navigate(`/form-builder/${response.data.formId}`);
-      handleClose(); 
+      handleClose();
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
       toast.error(error.response?.data?.error || "Failed to add form.");

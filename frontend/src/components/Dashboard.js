@@ -46,7 +46,7 @@ function Dashboard() {
   const fetchCompanyDetails = async (companyId) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/companies/company/${companyId}`
+        `https://formx360-backend.onrender.com/companies/company/${companyId}`
       );
       setCompanyDetails(response.data.company);
     } catch (error) {
@@ -62,7 +62,7 @@ function Dashboard() {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/companies/company/${companyId}/users`
+        `https://formx360-backend.onrender.com/companies/company/${companyId}/users`
       );
       setUsers(response.data.users);
     } catch (error) {
@@ -101,7 +101,7 @@ function Dashboard() {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/companies/company/${companyId}/users`,
+        `https://formx360-backend.onrender.com/companies/company/${companyId}/users`,
         newUser
       );
       if (response.status === 200) {
@@ -116,7 +116,9 @@ function Dashboard() {
 
   const handleDeleteUser = async (userId) => {
     try {
-      await axios.delete(`http://localhost:5000/companies/users/${userId}`);
+      await axios.delete(
+        `https://formx360-backend.onrender.com/companies/users/${userId}`
+      );
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
       toast.success("User deleted successfully!");
       handleCloseDeleteModal();
@@ -134,7 +136,7 @@ function Dashboard() {
 
     try {
       await axios.put(
-        `http://localhost:5000/companies/company/${companyId}`,
+        `https://formx360-backend.onrender.com/companies/company/${companyId}`,
         updatedCompany
       );
 
@@ -154,7 +156,7 @@ function Dashboard() {
   const handleDeleteCompany = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/companies/company/${companyId}`
+        `https://formx360-backend.onrender.com/companies/company/${companyId}`
       );
       toast.success("Company deleted successfully!");
       sessionStorage.removeItem("companyId");
@@ -172,7 +174,7 @@ function Dashboard() {
     try {
       const updatedUser = { role: newRole };
       await axios.put(
-        `http://localhost:5000/companies/users/${userId}`,
+        `https://formx360-backend.onrender.com/companies/users/${userId}`,
         updatedUser
       );
       setUsers((prevUsers) =>
@@ -381,7 +383,7 @@ function Dashboard() {
       <DeleteUserModal
         show={showDeleteModal}
         handleClose={handleCloseDeleteModal}
-        userToEdit={userToEdit} 
+        userToEdit={userToEdit}
         handleDeleteUser={handleDeleteUser}
       />
       {/* Toast Notifications */}

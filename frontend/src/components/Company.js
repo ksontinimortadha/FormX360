@@ -52,7 +52,7 @@ function CompanyPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/companies/company",
+        "https://formx360-backend.onrender.com/companies/company",
         {
           name: companyName,
           industry,
@@ -60,7 +60,6 @@ function CompanyPage() {
           userId,
         }
       );
-
 
       const newCompany = response.data.company;
 

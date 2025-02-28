@@ -23,47 +23,46 @@ function Security() {
   const location = useLocation();
   const { userId } = useParams();
 
- const handlePasswordChange = async () => {
-   if (newPassword !== confirmPassword) {
-     setError("New password and confirmation do not match.");
-     return;
-   }
+  const handlePasswordChange = async () => {
+    if (newPassword !== confirmPassword) {
+      setError("New password and confirmation do not match.");
+      return;
+    }
 
-   setLoading(true);
-   setError(null);
+    setLoading(true);
+    setError(null);
 
-   try {
-     const token = localStorage.getItem("token"); // Get the JWT token from localStorage
-     if (!token) {
-       setError("You need to be logged in.");
-       setLoading(false);
-       return;
-     }
+    try {
+      const token = localStorage.getItem("token"); // Get the JWT token from localStorage
+      if (!token) {
+        setError("You need to be logged in.");
+        setLoading(false);
+        return;
+      }
 
-     // Call the backend API to change the password
-     const response = await axios.put(
-       `http://localhost:5000/users/change-password`,
-       {
-         currentPassword,
-         newPassword,
-       },
-       {
-         headers: {
-           Authorization: `Bearer ${token}`, // Send the JWT token in the request header
-         },
-       }
-     );
+      // Call the backend API to change the password
+      const response = await axios.put(
+        `https://formx360-backend.onrender.com/users/change-password`,
+        {
+          currentPassword,
+          newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send the JWT token in the request header
+          },
+        }
+      );
 
-     setLoading(false);
-     setSuccess(true);
-     toast.success("Password updated successfully!");
-   } catch (err) {
-     setLoading(false);
-     setError("Failed to update password. Please try again.");
-     console.error(err);
-   }
- };
-
+      setLoading(false);
+      setSuccess(true);
+      toast.success("Password updated successfully!");
+    } catch (err) {
+      setLoading(false);
+      setError("Failed to update password. Please try again.");
+      console.error(err);
+    }
+  };
 
   const menuItems = [
     { path: "/dashboard", label: "Dashboard", icon: <FaUser /> },
@@ -137,7 +136,7 @@ function Security() {
         </Col>
 
         {/* Main content */}
-        <Col sm={9} md={9} lg={9} >
+        <Col sm={9} md={9} lg={9}>
           <Card className="shadow-sm border-0 rounded-4 mb-4">
             <Card.Body>
               <h5 className="mb-4 text-center">

@@ -7,7 +7,9 @@ function DeleteFormModal({ show, handleClose, formToEdit, fetchForms }) {
   const handleDeleteForm = async () => {
     if (!formToEdit) return;
     try {
-      await axios.delete(`http://localhost:5000/forms/${formToEdit._id}`);
+      await axios.delete(
+        `https://formx360-backend.onrender.com/forms/${formToEdit._id}`
+      );
       toast.success("Form deleted successfully.");
       fetchForms(formToEdit.companyId);
       handleClose();

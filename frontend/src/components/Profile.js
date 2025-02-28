@@ -48,7 +48,7 @@ function Profile() {
   const fetchUserInfo = async (companyId, userId) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/companies/company/${companyId}/users/${userId}`
+        `https://formx360-backend.onrender.com/companies/company/${companyId}/users/${userId}`
       );
       setUserInfo(response.data.user); // Ensure to access the user data properly
       console.log("user info:", response.data.user);
@@ -67,7 +67,7 @@ function Profile() {
   const handleEditUser = async (updatedUser) => {
     try {
       await axios.put(
-        `http://localhost:5000/companies/users/${userId}`, // Using the userId in the URL
+        `https://formx360-backend.onrender.com/companies/users/${userId}`, // Using the userId in the URL
         updatedUser
       );
       setShowModal(false); // Close the modal after saving

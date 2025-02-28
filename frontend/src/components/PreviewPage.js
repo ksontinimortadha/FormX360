@@ -15,7 +15,7 @@ const PreviewPage = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:5000/forms/${formId}`
+          `https://formx360-backend.onrender.com/forms/${formId}`
         );
         setFormData(response.data.form);
       } catch (err) {
