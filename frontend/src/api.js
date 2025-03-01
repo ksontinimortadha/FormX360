@@ -7,7 +7,7 @@ const API = axios.create({
 
 // Registration API
 export const registerUser = (userData) => API.post("/users/register", userData);
-export const loginUser = (userData) => API.post("/users/login", userData);
+export const loginUser = (userData) => API.post("/login", userData);
 
 // Verify email with token
 export const verifyEmail = async (token) => {
