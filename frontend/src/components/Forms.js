@@ -32,7 +32,7 @@ function Forms() {
     if (!companyId) return;
     try {
       const response = await axios.get(
-        `https://formx360-backend.onrender.com/forms/${companyId}/forms`
+        `https://form-x360-backend.vercel.app/forms/${companyId}/forms`
       );
       setForms(response.data);
     } catch (error) {

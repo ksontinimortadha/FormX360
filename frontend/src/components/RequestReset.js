@@ -25,7 +25,7 @@ function RequestReset() {
 
     try {
       const response = await fetch(
-        "https://formx360-backend.onrender.com/users/reset-password-request",
+        "https://form-x360-backend.vercel.app/users/reset-password-request",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

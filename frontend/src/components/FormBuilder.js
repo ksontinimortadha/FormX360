@@ -41,7 +41,7 @@ const FormBuilder = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `https://formx360-backend.onrender.com/forms/${formId}`
+          `https://form-x360-backend.vercel.app/forms/${formId}`
         );
         const form = response.data.form;
         console.log("form", form);
@@ -123,7 +123,7 @@ const FormBuilder = () => {
       console.log("Updated form fields:", updatedFields);
 
       // Send updated form data to the backend
-      await axios.put(`https://formx360-backend.onrender.com/forms/${formId}`, {
+      await axios.put(`https://form-x360-backend.vercel.app/forms/${formId}`, {
         title: formTitle,
         description: formDescription,
         fields: updatedFields,

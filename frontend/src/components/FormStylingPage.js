@@ -21,7 +21,7 @@ const FormStylingPage = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `https://formx360-backend.onrender.com/forms/${formId}`
+          `https://form-x360-backend.vercel.app/forms/${formId}`
         );
         setFormData(response.data.form);
       } catch (err) {

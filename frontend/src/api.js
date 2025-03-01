@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Axios instance
 const API = axios.create({
-  baseURL: "https://formx360-backend.onrender.com",
+  baseURL: "https://form-x360-backend.vercel.app",
 });
 
 // Registration API
@@ -13,7 +13,7 @@ export const loginUser = (userData) => API.post("/users/login", userData);
 export const verifyEmail = async (token) => {
   try {
     const response = await axios.get(
-      `https://formx360-backend.onrender.com/users/verify-email?token=${token}`
+      `https://form-x360-backend.vercel.app/users/verify-email?token=${token}`
     );
     console.log("Verification successful:", response.data);
   } catch (error) {
