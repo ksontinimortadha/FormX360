@@ -23,8 +23,8 @@ function App() {
         {" "}
         {/* auth Routes  */}
         <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/users/register" element={<Register />} />
+        <Route path="/users/login" element={<Login />} />
         <Route path="/reset-password-request" element={<RequestReset />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/users/verify-email" element={<VerifyEmail />} />

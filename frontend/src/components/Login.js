@@ -33,8 +33,7 @@ function Login() {
       if (response.data?.user?.id) {
         sessionStorage.setItem("userId", response.data.user.id);
         sessionStorage.setItem("token", response.data.token);
-        localStorage.setItem("token", response.data.token); // Assuming the token is in the response
-
+        localStorage.setItem("token", response.data.token);
         // Retrieve company data
         const companyId = response.data.user.companyId;
         const token = localStorage.getItem("token");
@@ -50,7 +49,7 @@ function Login() {
           navigate(`/dashboard?companyId=${companyId}`);
         } else {
           // If no companyId is found, show an error
-          setError("You are not part of any company.");
+          navigate(`/company`);
           setLoading(false);
         }
       } else {
@@ -181,7 +180,7 @@ function Login() {
                 <span
                   className="text-primary text-decoration-none"
                   style={{ cursor: "pointer", marginLeft: "2px" }}
-                  onClick={() => navigate("/register")}
+                  onClick={() => navigate("/users/register")}
                 >
                   Sign Up
                 </span>
