@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Axios instance
 const API = axios.create({
-  baseURL: "//https://form-x360-backend.vercel.app",
+  baseURL: "https://form-x360-backend.vercel.app",
 });
 
 // Registration API
