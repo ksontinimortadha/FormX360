@@ -2,12 +2,12 @@ import axios from "axios";
 
 // Axios instance
 const API = axios.create({
-  baseURL: "https://form-x360-backend.vercel.app",
+  baseURL: "//https://form-x360-backend.vercel.app",
 });
 
 // Registration API
 export const registerUser = (userData) => API.post("/users/register", userData);
-export const loginUser = (userData) => API.post("/login", userData);
+export const loginUser = (userData) => API.post("/users/login", userData);
 
 // Verify email with token
 export const verifyEmail = async (token) => {
