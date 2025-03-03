@@ -174,7 +174,7 @@ function Login() {
                 <span
                   className="text-primary text-decoration-none"
                   style={{ cursor: "pointer", marginLeft: "2px" }}
-                  onClick={() => navigate("/register")}
+                  onClick={() => navigate("/users/register")}
                 >
                   Sign Up
                 </span>

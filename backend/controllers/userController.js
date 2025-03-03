@@ -38,7 +38,7 @@ exports.sendVerificationEmail = async (user, res) => {
     expiresIn: "1h",
   });
 
-  const verificationLink = `${process.env.FRONTEND_URL}/users/verify-email?token=${token}`;
+  const verificationLink = `https://formx360.vercel.app/users/verify-email?token=${token}`;
 
   try {
     await sendEmail(
@@ -194,7 +194,7 @@ exports.resetPasswordRequest = async (req, res) => {
       expiresIn: "1h",
     });
 
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}&email=${user.email}`;
+    const resetLink = `https://formx360.vercel.app/reset-password?token=${resetToken}&email=${user.email}`;
 
     await sendEmail(
       user.email,
