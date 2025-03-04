@@ -170,7 +170,7 @@ exports.addUserToCompany = async (req, res) => {
         pass: process.env.EMAIL_PASS,
       },
     });
-    const loginLink = "https://formx360.vercel.app/login";
+    const loginLink = "https://formx360.vercel.app/users/login";
     const emailContent = `
       Hi ${firstName} ${lastName},
 
