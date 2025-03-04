@@ -73,7 +73,7 @@ const VerifyEmail = () => {
           <Card.Footer className="text-center bg-light">
             <Button
               variant="primary"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/users/login")}
               disabled={!isSuccess}
             >
               Go to Login
