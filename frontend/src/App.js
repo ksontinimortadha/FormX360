@@ -29,7 +29,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/users/verify-email" element={<VerifyEmail />} />
         {/* Company Routes  */}
-        <Route path="/company" element={<Company />} />
+        <Route path="/companies/company" element={<Company />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/profile/:userId" element={<Profile />} />
         <Route path="/security/:userId" element={<Security />} />

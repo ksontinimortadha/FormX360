@@ -43,7 +43,7 @@ function Login() {
          sessionStorage.setItem("companyId", companyId);
          navigate(`/dashboard?companyId=${companyId}`);
        } else {
-         navigate(`/company`);
+         navigate(`/companies/company`);
        }
      } else {
        setError("Invalid credentials.");
