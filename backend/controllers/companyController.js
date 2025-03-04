@@ -161,6 +161,40 @@ exports.addUserToCompany = async (req, res) => {
     company.users.push(newUser._id);
     await company.save();
 
+    const transporter = nodemailer.createTransport({
+      secure: true,
+      host: "smtp.gmail.com",
+      port: 465,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+    const loginLink = "https://formx360.vercel.app/login";
+    const emailContent = `
+      Hi ${firstName} ${lastName},
+
+      You have been added to the company "${company.name}" on FormX360.
+
+      Here are your login credentials:
+      - Email: ${email}
+      - Password: ${password}
+
+      For security reasons, we strongly recommend changing your password after logging in.
+
+      You can log in here: ${loginLink}
+
+      Best regards,
+      The FormX360 Team
+    `;
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Welcome to FormX360",
+      text: emailContent,
+    });
+
     res
       .status(201)
       .json({ message: "User added successfully!", user: newUser });

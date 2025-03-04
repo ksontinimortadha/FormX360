@@ -118,7 +118,6 @@ function Dashboard() {
       if (response.status === 201 || response.status === 200) {
         setUsers((prevUsers) => [...prevUsers, response.data.newUser]);
 
-        console.log("User added successfully!");
         toast.success("User added successfully!");
         handleCloseAddModal();
       }
