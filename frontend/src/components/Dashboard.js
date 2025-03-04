@@ -82,7 +82,7 @@ function Dashboard() {
 
   const handleLogout = () => {
     sessionStorage.removeItem("companyId");
-    navigate("/login");
+    navigate("/users/login");
   };
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -104,15 +104,21 @@ function Dashboard() {
         `https://formx360.onrender.com/companies/company/${companyId}/users`,
         newUser
       );
-      if (response.status === 200) {
+
+      if (response.status === 201 || response.status === 200) {
         setUsers((prevUsers) => [...prevUsers, response.data.newUser]);
+
+        console.log("User added successfully!");
         toast.success("User added successfully!");
-        handleClose();
+
+        setTimeout(() => handleClose(), 0);
       }
     } catch (error) {
+      console.error("Error adding user:", error);
       toast.error("Failed to add user.");
     }
   };
+
 
   const handleDeleteUser = async (userId) => {
     try {
