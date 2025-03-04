@@ -318,11 +318,11 @@ function Dashboard() {
                           {/* Action Buttons */}
                           <td>
                             <div className="d-flex gap-2">
-                              {editingUserId === user._id ? (
+                              {editingUserId === user?._id ? (
                                 <Button
                                   variant="outline-success"
                                   size="sm"
-                                  onClick={() => handleEditRole(user._id)}
+                                  onClick={() => handleEditRole(user?._id)}
                                 >
                                   Save
                                 </Button>
@@ -331,8 +331,8 @@ function Dashboard() {
                                   variant="outline-primary"
                                   size="sm"
                                   onClick={() => {
-                                    setEditingUserId(user._id);
-                                    setNewRole(user.role);
+                                    setEditingUserId(user?._id);
+                                    setNewRole(user?.role);
                                   }}
                                 >
                                   Edit Role
