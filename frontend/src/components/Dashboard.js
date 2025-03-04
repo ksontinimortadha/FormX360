@@ -64,9 +64,12 @@ function Dashboard() {
       const response = await axios.get(
         `https://formx360.onrender.com/companies/company/${companyId}/users`
       );
-      setUsers(response.data.users);
+      console.log("Fetched users:", response.data.users); // Debug
+      setUsers(response.data.users || []); // Assure que `users` est toujours un tableau
     } catch (error) {
+      console.error("Error fetching users:", error);
       toast.error("Failed to fetch users.");
+      setUsers([]); // Sécurise en cas d'erreur
     }
   };
 
@@ -287,10 +290,11 @@ function Dashboard() {
                       </tr>
                     ) : (
                       users.map((user) => (
-                        <tr key={user.id}>
+                        <tr key={user?._id}>
                           {/* Name Column */}
-                          <td>{`${user.firstName} ${user.lastName}`}</td>
-
+                          <td>
+                            {user?.firstName} {user?.lastName}
+                          </td>
                           {/* Email Column */}
                           <td>{user.email}</td>
 
