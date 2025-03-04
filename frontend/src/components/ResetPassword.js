@@ -47,7 +47,7 @@ function ResetPassword() {
     try {
       // Send the token, email, and new password in the request body
       const response = await fetch(
-        "https://form-x360-backend.vercel.app/users/reset-password", // Update with actual backend URL
+        "https://formx360.onrender.com/users/reset-password", // Update with actual backend URL
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

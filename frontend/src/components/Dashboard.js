@@ -46,7 +46,7 @@ function Dashboard() {
   const fetchCompanyDetails = async (companyId) => {
     try {
       const response = await axios.get(
-        `https://form-x360-backend.vercel.app/companies/company/${companyId}`
+        `https://formx360.onrender.com/companies/company/${companyId}`
       );
       setCompanyDetails(response.data.company);
     } catch (error) {
@@ -62,7 +62,7 @@ function Dashboard() {
 
     try {
       const response = await axios.get(
-        `https://form-x360-backend.vercel.app/companies/company/${companyId}/users`
+        `https://formx360.onrender.com/companies/company/${companyId}/users`
       );
       setUsers(response.data.users);
     } catch (error) {
@@ -101,7 +101,7 @@ function Dashboard() {
 
     try {
       const response = await axios.post(
-        `https://form-x360-backend.vercel.app/companies/company/${companyId}/users`,
+        `https://formx360.onrender.com/companies/company/${companyId}/users`,
         newUser
       );
       if (response.status === 200) {
@@ -117,7 +117,7 @@ function Dashboard() {
   const handleDeleteUser = async (userId) => {
     try {
       await axios.delete(
-        `https://form-x360-backend.vercel.app/companies/users/${userId}`
+        `https://formx360.onrender.com/companies/users/${userId}`
       );
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
       toast.success("User deleted successfully!");
@@ -136,7 +136,7 @@ function Dashboard() {
 
     try {
       await axios.put(
-        `https://form-x360-backend.vercel.app/companies/company/${companyId}`,
+        `https://formx360.onrender.com/companies/company/${companyId}`,
         updatedCompany
       );
 
@@ -156,7 +156,7 @@ function Dashboard() {
   const handleDeleteCompany = async () => {
     try {
       await axios.delete(
-        `https://form-x360-backend.vercel.app/companies/company/${companyId}`
+        `https://formx360.onrender.com/companies/company/${companyId}`
       );
       toast.success("Company deleted successfully!");
       sessionStorage.removeItem("companyId");
@@ -174,7 +174,7 @@ function Dashboard() {
     try {
       const updatedUser = { role: newRole };
       await axios.put(
-        `https://form-x360-backend.vercel.app/companies/users/${userId}`,
+        `https://formx360.onrender.com/companies/users/${userId}`,
         updatedUser
       );
       setUsers((prevUsers) =>

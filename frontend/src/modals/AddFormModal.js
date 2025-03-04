@@ -36,7 +36,7 @@ function AddFormModal({ show, handleClose, fetchForms, companyId }) {
       }
 
       const response = await axios.post(
-        `https://form-x360-backend.vercel.app/forms/${companyId}/forms`,
+        `https://formx360.onrender.com/forms/${companyId}/forms`,
         {
           title: formTitle,
           description: formDescription, // Sending description

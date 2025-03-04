@@ -42,7 +42,7 @@ function Security() {
 
       // Call the backend API to change the password
       const response = await axios.put(
-        `https://form-x360-backend.vercel.app/users/change-password`,
+        `https://formx360.onrender.com/users/change-password`,
         {
           currentPassword,
           newPassword,

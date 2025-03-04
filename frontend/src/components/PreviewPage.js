@@ -15,7 +15,7 @@ const PreviewPage = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `https://form-x360-backend.vercel.app/forms/${formId}`
+          `https://formx360.onrender.com/forms/${formId}`
         );
         setFormData(response.data.form);
       } catch (err) {

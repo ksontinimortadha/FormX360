@@ -52,7 +52,7 @@ function CompanyPage() {
 
     try {
       const response = await axios.post(
-        "https://form-x360-backend.vercel.app/companies/company",
+        "https://formx360.onrender.com/companies/company",
         {
           name: companyName,
           industry,

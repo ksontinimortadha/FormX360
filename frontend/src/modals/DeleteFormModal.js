@@ -8,7 +8,7 @@ function DeleteFormModal({ show, handleClose, formToEdit, fetchForms }) {
     if (!formToEdit) return;
     try {
       await axios.delete(
-        `https://form-x360-backend.vercel.app/forms/${formToEdit._id}`
+        `https://formx360.onrender.com/forms/${formToEdit._id}`
       );
       toast.success("Form deleted successfully.");
       fetchForms(formToEdit.companyId);
