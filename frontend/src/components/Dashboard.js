@@ -300,7 +300,7 @@ function Dashboard() {
 
                           {/* Role Column */}
                           <td>
-                            {editingUserId === user._id ? (
+                            {editingUserId === user?._id ? (
                               <select
                                 value={newRole}
                                 onChange={(e) => setNewRole(e.target.value)}
