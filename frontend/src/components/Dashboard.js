@@ -73,8 +73,8 @@ function Dashboard() {
   useEffect(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     setIsValid(
-      firstName.trim() &&
-        lastName.trim() &&
+      firstName &&
+        lastName &&
         emailRegex.test(email) &&
         (password.length >= 6 || !password)
     );
@@ -93,7 +93,6 @@ function Dashboard() {
     setPassword("");
     setShowModal(false);
   };
-
 
   const handleShowDeleteModal = () => setShowDeleteModal(true);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
