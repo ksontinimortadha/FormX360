@@ -287,7 +287,7 @@ function Dashboard() {
                       </tr>
                     ) : (
                       users.map((user) => (
-                        <tr key={user._id}>
+                        <tr key={user.id}>
                           {/* Name Column */}
                           <td>{`${user.firstName} ${user.lastName}`}</td>
 
