@@ -85,7 +85,15 @@ function Dashboard() {
     navigate("/users/login");
   };
   const handleShow = () => setShowModal(true);
-  const handleCloseAddModal = () => setShowModal(false);
+  const handleCloseAddModal = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setRole("User");
+    setPassword("");
+    setShowModal(false);
+  };
+
 
   const handleShowDeleteModal = () => setShowDeleteModal(true);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
