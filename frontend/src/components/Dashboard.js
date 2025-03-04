@@ -296,7 +296,7 @@ function Dashboard() {
                             {user?.firstName} {user?.lastName}
                           </td>
                           {/* Email Column */}
-                          <td>{user.email}</td>
+                          <td>{user?.email}</td>
 
                           {/* Role Column */}
                           <td>
@@ -311,7 +311,7 @@ function Dashboard() {
                                 <option value="User">User</option>
                               </select>
                             ) : (
-                              user.role
+                              user?.role
                             )}
                           </td>
 
