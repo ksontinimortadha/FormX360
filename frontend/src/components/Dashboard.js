@@ -85,7 +85,7 @@ function Dashboard() {
     navigate("/users/login");
   };
   const handleShow = () => setShowModal(true);
-  const handleClose = () => setShowModal(false);
+  const handleCloseAddModal = () => setShowModal(false);
 
   const handleShowDeleteModal = () => setShowDeleteModal(true);
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
@@ -110,15 +110,13 @@ function Dashboard() {
 
         console.log("User added successfully!");
         toast.success("User added successfully!");
-
-        setTimeout(() => handleClose(), 0);
+        handleCloseAddModal();
       }
     } catch (error) {
       console.error("Error adding user:", error);
       toast.error("Failed to add user.");
     }
   };
-
 
   const handleDeleteUser = async (userId) => {
     try {
@@ -371,7 +369,7 @@ function Dashboard() {
 
       <AddUserModal
         show={showModal}
-        handleClose={handleClose}
+        handleClose={handleCloseAddModal}
         handleSaveUser={handleSaveUser}
         firstName={firstName}
         lastName={lastName}
