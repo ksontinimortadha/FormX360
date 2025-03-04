@@ -296,7 +296,7 @@ function Register() {
                     <a
                       href="#!"
                       className="text-primary text-decoration-none"
-                      onClick={() => navigate("users/login")}
+                      onClick={() => navigate("/users/login")}
                     >
                       Sign In
                     </a>
