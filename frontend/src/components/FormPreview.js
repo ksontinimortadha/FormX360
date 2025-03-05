@@ -1,5 +1,5 @@
-import React from 'react'
-import { Alert, Card, Spinner } from 'react-bootstrap';
+import React from "react";
+import { Alert, Card, Spinner } from "react-bootstrap";
 
 function FormPreview({ selectedTheme, loading, error, renderFormFields }) {
   return (
@@ -27,4 +27,4 @@ function FormPreview({ selectedTheme, loading, error, renderFormFields }) {
   );
 }
 
-export default FormPreview
+export default FormPreview;

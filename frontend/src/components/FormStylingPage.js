@@ -7,15 +7,16 @@ import ThemeSelector from "./ThemeSelector";
 
 const FormStylingPage = () => {
   const [formData, setFormData] = useState(null);
-  const [selectedTheme, setSelectedTheme] = useState("Minialist-white");
-  const [setIsDropdownOpen] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState("Minimalist-white");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [setSelectedField] = useState(null);
-  const [fieldStyles] = useState({});
-  const [setShowModal] = useState(false);
+  const [selectedField, setSelectedField] = useState(null);
+  const [fieldStyles, setFieldStyles] = useState({});
+  const [showModal, setShowModal] = useState(false);
   const { formId } = useParams();
 
+  // Fetch form data from the API
   useEffect(() => {
     const fetchFormData = async () => {
       try {
@@ -34,16 +35,19 @@ const FormStylingPage = () => {
     fetchFormData();
   }, [formId]);
 
+  // Handle theme selection
   const handleThemeChange = (theme) => {
     setSelectedTheme(theme.className);
     setIsDropdownOpen(false);
   };
 
+  // Handle field click (to trigger modal or styles)
   const handleFieldClick = (fieldIndex) => {
     setSelectedField(fieldIndex);
-    setShowModal(true);
+    setShowModal(true); // Assume modal handles field-specific actions
   };
 
+  // Render form fields dynamically
   const renderFormFields = () => {
     if (formData && formData.fields) {
       return formData.fields.map((field, index) => {
@@ -54,7 +58,7 @@ const FormStylingPage = () => {
 
         const fieldContent = (
           <>
-            {/* Checkbox and Radio Group */}
+            {/* Render checkbox or radio group */}
             {field.type === "checkbox-group" || field.type === "radio-group" ? (
               <div>
                 {field.label}
@@ -70,7 +74,6 @@ const FormStylingPage = () => {
                       {option.label}
                     </label>
                   ))}
-
                 {field.type === "radio-group" &&
                   field.values.map((option, i) => (
                     <label key={i}>
