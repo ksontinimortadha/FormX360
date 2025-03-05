@@ -195,17 +195,18 @@ const FormStylingPage = () => {
       <h1 className="text-center">Style Your Form</h1>
 
       <div className="d-flex justify-content-between">
+        {/* Right side: Theme Selector */}
+        <ThemeSelector
+          selectedTheme={selectedTheme}
+          onThemeChange={(theme) => handleThemeChange(theme)}
+        />
+
         {/* Left side: Form Preview */}
         <FormPreview
           selectedTheme={selectedTheme}
           loading={loading}
           error={error}
           renderFormFields={renderFormFields}
-        />
-        {/* Right side: Theme Selector */}
-        <ThemeSelector
-          selectedTheme={selectedTheme}
-          onThemeChange={handleThemeChange}
         />
       </div>
     </div>
