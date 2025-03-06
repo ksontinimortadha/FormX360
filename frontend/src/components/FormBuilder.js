@@ -16,6 +16,7 @@ import ProgressBarComponent from "./ProgressBarComponent";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./FormBuilder.css";
 import $ from "jquery";
+import { toast, ToastContainer } from "react-toastify";
 
 window.jQuery = $;
 window.$ = $;
@@ -87,7 +88,7 @@ const FormBuilder = () => {
       );
 
       if (!Array.isArray(updatedFields)) {
-        setError("❌ Invalid form data. Please refresh and try again.");
+        toast.error("Invalid form data. Please refresh and try again.");
         return;
       }
 
@@ -105,22 +106,8 @@ const FormBuilder = () => {
           }));
         }
 
-        // Handle field validation rules
-        if (field.validation_rules) {
-          field.validation_rules = {
-            ...field.validation_rules,
-            min_length: field.validation_rules.min_length ?? undefined,
-            max_length: field.validation_rules.max_length ?? undefined,
-            min_value: field.validation_rules.min_value ?? undefined,
-            max_value: field.validation_rules.max_value ?? undefined,
-            min_date: field.validation_rules.min_date ?? undefined,
-            max_date: field.validation_rules.max_date ?? undefined,
-          };
-        }
+        
       });
-
-      // Log updated form data for debugging
-      console.log("Updated form fields:", updatedFields);
 
       // Send updated form data to the backend
       await axios.put(`https://formx360.onrender.com/forms/${formId}`, {
@@ -129,12 +116,11 @@ const FormBuilder = () => {
         fields: updatedFields,
       });
 
-      // Show success notification (replace with a toast if using react-toastify)
       setProgress(100);
-      alert("✅ Form saved successfully!");
+      toast.success("Form saved successfully!");
     } catch (err) {
       console.error("Error saving form:", err);
-      setError("❌ Error saving form. Please try again.");
+      setError("Error saving form. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -267,6 +253,7 @@ const FormBuilder = () => {
           </Col>
         </Row>
       </Container>
+      <ToastContainer />
     </div>
   );
 };

@@ -9,7 +9,7 @@ function EditStyleModal({
   handleStyleChange,
 }) {
   return (
-    <Modal show={show} onHide={onHide} centered className="ios-modal">
+    <Modal show={show} onHide={onHide} dialogClassName="right-modal">
       <Modal.Header closeButton className="border-0 pb-0">
         <Modal.Title className="text-lg font-semibold text-gray-800">
           Customize Field Style
@@ -19,7 +19,10 @@ function EditStyleModal({
         <div className="form-styling-controls space-y-4">
           {/* Background Color */}
           <div className="control-group space-y-1">
-            <label className="text-gray-700 font-medium pr-5">
+            <label
+              className="text-gray-700 font-medium pr-5"
+              style={{ marginRight: "15px" }}
+            >
               Background Color
             </label>
             <input
@@ -37,7 +40,12 @@ function EditStyleModal({
 
           {/* Text Color */}
           <div className="control-group space-y-1">
-            <label className="text-gray-700 font-medium pr-5">Text Color</label>
+            <label
+              className="text-gray-700 font-medium pr-5"
+              style={{ marginRight: "15px" }}
+            >
+              Text Color
+            </label>
             <input
               type="color"
               className="w-full h-10 rounded-lg border border-gray-300 p-1 cursor-pointer"
@@ -68,7 +76,7 @@ function EditStyleModal({
                 </button>
               ))}
             </div>
-            <p style={{ color: "grey" , marginTop:"5px" }}>
+            <p style={{ color: "grey", marginTop: "5px" }}>
               Select where you want the field to be positioned.
             </p>
           </div>

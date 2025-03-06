@@ -4,6 +4,7 @@ import "./FormStylingPage.css";
 import { useParams } from "react-router-dom";
 import FormPreview from "./FormPreview";
 import ThemeSelector from "./ThemeSelector";
+import EditStyleModal from "../modals/EditStyleModal";
 
 const FormStylingPage = () => {
   const [formData, setFormData] = useState(null);
@@ -36,17 +37,23 @@ const FormStylingPage = () => {
   }, [formId]);
 
   // Handle theme selection
-  const handleThemeChange = (theme) => {
-    setSelectedTheme(theme.className);
-    setIsDropdownOpen(false);
-  };
+   const handleThemeChange = (themeClassName) => {
+     setSelectedTheme(themeClassName); 
+   };
 
-  // Handle field click (to trigger modal or styles)
+  // Handle field click 
   const handleFieldClick = (fieldIndex) => {
     setSelectedField(fieldIndex);
-    setShowModal(true); // Assume modal handles field-specific actions
+    setShowModal(true); 
   };
-
+  const handleStyleChange = (styleType, value) => {
+    const updatedFieldStyles = { ...fieldStyles };
+    updatedFieldStyles[selectedField] = {
+      ...updatedFieldStyles[selectedField],
+      [styleType]: value,
+    };
+    setFieldStyles(updatedFieldStyles);
+  };
   // Render form fields dynamically
   const renderFormFields = () => {
     if (formData && formData.fields) {
@@ -206,9 +213,14 @@ const FormStylingPage = () => {
           renderFormFields={renderFormFields}
         />
         {/* Right side: Theme Selector */}
-        <ThemeSelector
-          selectedTheme={selectedTheme}
-          onThemeChange={(theme) => handleThemeChange(theme)}
+        <ThemeSelector onThemeChange={handleThemeChange} />
+        {/* Modal for Styling Control */}
+        <EditStyleModal
+          show={showModal}
+          onHide={() => setShowModal(false)}
+          fieldStyles={fieldStyles}
+          selectedField={selectedField}
+          handleStyleChange={handleStyleChange}
         />
       </div>
     </div>

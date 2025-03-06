@@ -106,19 +106,15 @@ exports.getFormById = async (req, res) => {
 // Update a Form
 exports.updateForm = async (req, res) => {
   const { id } = req.params;
-  const { title, description, field_order = [], fields = [], values } = req.body;
+  const {
+    title,
+    description,
+    field_order = [],
+    fields = [],
+    values,
+  } = req.body;
 
   try {
-    // Log to verify all received data
-    console.log("Received update request for form:", {
-      id,
-      title,
-      description,
-      field_order,
-      fields,
-      values,
-    });
-
     if (!Array.isArray(fields)) {
       return res
         .status(400)
@@ -156,9 +152,6 @@ exports.updateForm = async (req, res) => {
       }
     });
 
-    // Log the updated fields to verify correct structure
-    console.log("Updated fields:", fields);
-
     // Find and update the form, ensuring arrays are replaced properly
     const updatedForm = await Form.findByIdAndUpdate(
       id,
@@ -194,6 +187,39 @@ exports.deleteForm = async (req, res) => {
 
     res.status(200).json({ message: "Form deleted successfully" });
   } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+exports.updateFormStyle = async (req, res) => {
+  const { id } = req.params;
+  const { theme } = req.body;
+
+  try {
+    // Validate input
+    if (!theme || typeof theme !== "object") {
+      return res.status(400).json({ message: "Invalid theme data." });
+    }
+
+    // Find and update the form's theme
+    const updatedForm = await Form.findByIdAndUpdate(
+      id,
+      { theme },
+      { new: true }
+    );
+
+    // If the form is not found, return an error
+    if (!updatedForm) {
+      return res.status(404).json({ message: "Form not found" });
+    }
+
+    // Respond with the updated form
+    res.status(200).json({
+      message: "Form style updated successfully",
+      form: updatedForm,
+    });
+  } catch (err) {
+    console.error("Error updating form style:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };

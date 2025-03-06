@@ -6,6 +6,7 @@ const {
   updateForm,
   deleteForm,
   getCompanyForms,
+  updateFormStyle,
 } = require("../controllers/formController");
 const authenticateUser = require("../middlewares/authenticateUser");
 
@@ -23,5 +24,9 @@ router.put("/:id", updateForm);
 
 // Delete a form by ID
 router.delete("/:id", deleteForm);
+
+// Update form style
+router.put("/:id", updateFormStyle);
+
 
 module.exports = router;

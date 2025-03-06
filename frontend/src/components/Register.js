@@ -13,6 +13,7 @@ import { FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
 import logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api";
+import { toast, ToastContainer } from "react-toastify";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -78,7 +79,7 @@ function Register() {
         });
 
         console.log("Registration successful:", response.data);
-        alert(
+        toast.success(
           "Registration successful! Please check your email for a verification link."
         );
 
@@ -97,7 +98,9 @@ function Register() {
           "Registration failed:",
           error.response?.data || error.message
         );
-        alert(error.response?.data.message || "Error during registration");
+        toast.error(
+          error.response?.data.message || "Error during registration"
+        );
       } finally {
         setLoading(false); // Stop loading
       }
@@ -307,6 +310,7 @@ function Register() {
           </Row>
         </Card>
       </Container>
+      <ToastContainer />
     </section>
   );
 }

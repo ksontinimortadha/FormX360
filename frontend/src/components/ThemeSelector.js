@@ -1,44 +1,52 @@
 import React, { useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { FaEye } from "react-icons/fa";
-import EditStyleModal from "../modals/EditStyleModal";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import "./FormStylingPage.css";
 import { predefinedThemes } from "./themes";
 
-function ThemeSelector() {
+function ThemeSelector({ onThemeChange }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState("Minialist-white");
-  const [showModal, setShowModal] = useState(false);
-  const [fieldStyles, setFieldStyles] = useState({});
-  const [selectedField] = useState(null);
-  const { formId } = useParams();
+  const [selectedTheme, setSelectedTheme] = useState("minimalist-white");
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState(null);
 
+  const { formId } = useParams();
   const navigate = useNavigate();
 
   const handleThemeChange = (theme) => {
     setSelectedTheme(theme.className);
+    if (onThemeChange) {
+      onThemeChange(theme.className);
+    }
     setIsDropdownOpen(false);
   };
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-  // Redirect to the preview page
+
   const handlePreviewToggle = () => {
     navigate(`/preview/${formId}`);
   };
 
-  const handleStyleChange = (styleType, value) => {
-    const updatedFieldStyles = { ...fieldStyles };
-    updatedFieldStyles[selectedField] = {
-      ...updatedFieldStyles[selectedField],
-      [styleType]: value,
-    };
-    setFieldStyles(updatedFieldStyles);
-  };
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
 
-  const handleSave = () => {
-    // Redirect to the form page
-    navigate("/forms"); // Change this path to the actual form page URL
+      // Send the selected theme to the backend
+      await axios.put(`https://formx360.onrender.com/forms/${formId}`, {
+        theme: selectedTheme,
+      });
+
+      setIsSaving(false);
+      alert("success");
+    } catch (err) {
+      console.error("Error saving theme:", err);
+      setIsSaving(false);
+      setError("Error saving theme. Please try again.");
+    }
   };
 
   return (
@@ -50,9 +58,7 @@ function ThemeSelector() {
         <Card.Body>
           <h3>Select a Predefined Theme</h3>
 
-          {/* Dropdown for theme selection */}
           <div className="choosing-list-container" onClick={toggleDropdown}>
-            {/* Button to toggle preview */}
             <Button
               variant="secondary"
               onClick={handlePreviewToggle}
@@ -61,6 +67,7 @@ function ThemeSelector() {
               <FaEye style={{ marginRight: "5px" }} />
               Preview Form
             </Button>
+
             <div
               className="choosing-list"
               style={{
@@ -103,21 +110,17 @@ function ThemeSelector() {
             )}
           </div>
 
-          {/* Save Button */}
-          <Button variant="primary" className="mt-4 w-100" onClick={handleSave}>
-            Save
+          <Button
+            variant="primary"
+            className="mt-4 w-100"
+            onClick={handleSave}
+            disabled={isSaving}
+          >
+            {isSaving ? "Saving..." : "Save"}
           </Button>
+          {error && <div className="error-message">{error}</div>}
         </Card.Body>
       </Card>
-
-      {/* Modal for Styling Control */}
-      <EditStyleModal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        fieldStyles={fieldStyles}
-        selectedField={selectedField}
-        handleStyleChange={handleStyleChange}
-      />
     </div>
   );
 }

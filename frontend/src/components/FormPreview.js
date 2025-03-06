@@ -23,7 +23,6 @@ function FormPreview({ selectedTheme, loading, error, renderFormFields }) {
           )}
         </Card.Body>
       </Card>
-      
     </div>
   );
 }
