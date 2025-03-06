@@ -25,8 +25,4 @@ router.put("/:id", updateForm);
 // Delete a form by ID
 router.delete("/:id", deleteForm);
 
-// Update form style
-router.put("/:id", updateFormStyle);
-
-
 module.exports = router;

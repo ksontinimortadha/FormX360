@@ -109,6 +109,7 @@ exports.updateForm = async (req, res) => {
   const {
     title,
     description,
+    theme,
     field_order = [],
     fields = [],
     values,
@@ -151,11 +152,15 @@ exports.updateForm = async (req, res) => {
         };
       }
     });
+    // Validate input
+    if (!theme || typeof theme !== "object") {
+      return res.status(400).json({ message: "Invalid theme data." });
+    }
 
     // Find and update the form, ensuring arrays are replaced properly
     const updatedForm = await Form.findByIdAndUpdate(
       id,
-      { title, description, field_order, fields, values },
+      { title, description, theme, field_order, fields, values },
       { new: true } // Return updated form & validate fields
     );
 
@@ -187,39 +192,6 @@ exports.deleteForm = async (req, res) => {
 
     res.status(200).json({ message: "Form deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
-};
-
-exports.updateFormStyle = async (req, res) => {
-  const { id } = req.params;
-  const { theme } = req.body;
-
-  try {
-    // Validate input
-    if (!theme || typeof theme !== "object") {
-      return res.status(400).json({ message: "Invalid theme data." });
-    }
-
-    // Find and update the form's theme
-    const updatedForm = await Form.findByIdAndUpdate(
-      id,
-      { theme },
-      { new: true }
-    );
-
-    // If the form is not found, return an error
-    if (!updatedForm) {
-      return res.status(404).json({ message: "Form not found" });
-    }
-
-    // Respond with the updated form
-    res.status(200).json({
-      message: "Form style updated successfully",
-      form: updatedForm,
-    });
-  } catch (err) {
-    console.error("Error updating form style:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
