@@ -22,6 +22,9 @@ router.get("/:id", getFormById);
 // Update a form by ID
 router.put("/:id", updateForm);
 
+// Update form style
+router.put("/style/:id", updateFormStyle);
+
 // Delete a form by ID
 router.delete("/:id", deleteForm);
 

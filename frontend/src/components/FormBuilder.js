@@ -105,8 +105,6 @@ const FormBuilder = () => {
             selected: option.selected ?? false, // Default to false if missing
           }));
         }
-
-        
       });
 
       // Send updated form data to the backend

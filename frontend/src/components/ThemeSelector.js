@@ -35,19 +35,32 @@ function ThemeSelector({ onThemeChange }) {
     try {
       setIsSaving(true);
 
+      // Validate if selectedTheme exists
+      if (!selectedTheme) {
+        setError("Please select a theme.");
+        setIsSaving(false);
+        return;
+      }
+
       // Send the selected theme to the backend
-      await axios.put(`https://formx360.onrender.com/forms/${formId}`, {
-        theme: selectedTheme,
-      });
+      const response = await axios.put(
+        `https://formx360.onrender.com/forms/style/${formId}`,
+        { theme: selectedTheme }
+      );
+
+      // Check if the update was successful (status code 200)
+      if (response.status === 200) {
+        alert("Theme saved successfully!");
+      }
 
       setIsSaving(false);
-      alert("success");
     } catch (err) {
       console.error("Error saving theme:", err);
       setIsSaving(false);
       setError("Error saving theme. Please try again.");
     }
   };
+
 
   return (
     <div
