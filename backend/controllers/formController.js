@@ -191,29 +191,45 @@ exports.deleteForm = async (req, res) => {
   }
 };
 
+// Backend validation for theme data
 exports.updateFormStyle = async (req, res) => {
   const { id } = req.params;
   const { theme } = req.body;
 
   try {
-    // Validate input
-    if (!theme || typeof theme !== "object") {
+    // Validate if theme is a valid className
+    const validThemes = [
+      "classic-blue",
+      "modern-gray",
+      "light-airy",
+      "dark-mode",
+      "nature-green",
+      "vibrant-orange",
+      "minimalist-white",
+      "vintage-red",
+      "elegant-purple",
+      "tech-blue",
+      "professional-bw",
+      "fresh-mint",
+      "funky-pink",
+      "elegant-gold",
+      "techno-yellow",
+    ];
+
+    if (!validThemes.includes(theme)) {
       return res.status(400).json({ message: "Invalid theme data." });
     }
 
-    // Find the form and update only the theme without affecting other data
+    // Update the form's theme
     const updatedForm = await Form.findByIdAndUpdate(
       id,
       { $set: { theme } }, // Use $set to only update the theme field
       { new: true } // Ensure the updated form is returned
     );
-
-    // If the form is not found, return an error
     if (!updatedForm) {
       return res.status(404).json({ message: "Form not found" });
     }
 
-    // Respond with the updated form
     res.status(200).json({
       message: "Form style updated successfully",
       form: updatedForm,
@@ -223,4 +239,3 @@ exports.updateFormStyle = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
-

@@ -31,35 +31,57 @@ function ThemeSelector({ onThemeChange }) {
     navigate(`/preview/${formId}`);
   };
 
-  const handleSave = async () => {
-    try {
-      setIsSaving(true);
+ const handleSave = async () => {
+   try {
+     setIsSaving(true);
 
-      // Validate if selectedTheme exists
-      if (!selectedTheme) {
-        setError("Please select a theme.");
-        setIsSaving(false);
-        return;
-      }
+     // Validate if selectedTheme exists
+     if (!selectedTheme) {
+       setError("Please select a theme.");
+       setIsSaving(false);
+       return;
+     }
 
-      // Send the selected theme to the backend
-      const response = await axios.put(
-        `https://formx360.onrender.com/forms/style/${formId}`,
-        { theme: selectedTheme }
-      );
+     // Get the className of the selected theme
+     const selectedThemeClassName = predefinedThemes.find(
+       (theme) => theme.name === selectedTheme
+     )?.className;
 
-      // Check if the update was successful (status code 200)
-      if (response.status === 200) {
-        alert("Theme saved successfully!");
-      }
+     // Validate if the className exists
+     if (!selectedThemeClassName) {
+       setError("Invalid theme selected.");
+       setIsSaving(false);
+       return;
+     }
 
-      setIsSaving(false);
-    } catch (err) {
-      console.error("Error saving theme:", err);
-      setIsSaving(false);
-      setError("Error saving theme. Please try again.");
-    }
-  };
+     // Send the selected theme to the backend
+     const response = await axios.put(
+       `https://formx360.onrender.com/forms/style/${formId}`,
+       { theme: selectedThemeClassName }
+     );
+
+     // Check if the update was successful (status code 200)
+     if (response.status === 200) {
+       alert("Theme saved successfully!");
+     }
+
+     setIsSaving(false);
+   } catch (err) {
+     console.error("Error saving theme:", err);
+
+     // Check if err.response exists and log the error message from the server
+     if (err.response) {
+       console.error("Backend Error Message:", err.response.data);
+     } else {
+       console.error("Error Message:", err.message);
+     }
+
+     setIsSaving(false);
+     setError("Error saving theme. Please try again.");
+   }
+ };
+
+
 
 
   return (
