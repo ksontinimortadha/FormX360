@@ -221,6 +221,7 @@ const FormStylingPage = () => {
           onHide={() => setShowModal(false)}
           fieldStyles={fieldStyles}
           selectedField={selectedField}
+          formId={formId}
           handleStyleChange={handleStyleChange}
         />
       </div>

@@ -80,6 +80,19 @@ const formSchema = new mongoose.Schema(
         order: { type: Number, required: true }, // Position of the field
       },
     ],
+    fieldStyles: {
+      type: Map,
+      of: {
+        backgroundColor: { type: String, default: "#ffffff" },
+        color: { type: String, default: "#000000" },
+        position: {
+          type: String,
+          enum: ["left", "center", "right"],
+          default: "left",
+        },
+      },
+      default: {}, // Each field ID will map to a style object
+    },
   },
   { timestamps: true } // Automatically adds createdAt & updatedAt
 );

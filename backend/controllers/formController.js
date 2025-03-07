@@ -191,7 +191,7 @@ exports.deleteForm = async (req, res) => {
   }
 };
 
-// Backend validation for theme data
+// Update form theme
 exports.updateFormStyle = async (req, res) => {
   const { id } = req.params;
   const { theme } = req.body;
@@ -236,6 +236,53 @@ exports.updateFormStyle = async (req, res) => {
     });
   } catch (err) {
     console.error("Error updating form style:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+// update field style
+exports.updateFieldStyle = async (req, res) => {
+  const { formId, fieldId } = req.params;
+  const { backgroundColor, color, position } = req.body;
+
+  try {
+    // Validate position value
+    const validPositions = ["left", "center", "right"];
+    if (position && !validPositions.includes(position)) {
+      return res.status(400).json({ message: "Invalid position value." });
+    }
+
+    // Validate colors (optional: use regex for HEX validation)
+    if (backgroundColor && !/^#([0-9A-Fa-f]{3}){1,2}$/.test(backgroundColor)) {
+      return res
+        .status(400)
+        .json({ message: "Invalid background color format." });
+    }
+    if (color && !/^#([0-9A-Fa-f]{3}){1,2}$/.test(color)) {
+      return res.status(400).json({ message: "Invalid text color format." });
+    }
+
+    // Update the field's style
+    const updatedForm = await Form.findByIdAndUpdate(
+      formId,
+      {
+        $set: {
+          [`fieldStyles.${fieldId}`]: { backgroundColor, color, position },
+        },
+      },
+      { new: true } // Return updated form
+    );
+
+    if (!updatedForm) {
+      return res.status(404).json({ message: "Form not found" });
+    }
+
+    res.status(200).json({
+      message: "Field style updated successfully",
+      form: updatedForm,
+    });
+  } catch (err) {
+    console.error("Error updating field style:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
