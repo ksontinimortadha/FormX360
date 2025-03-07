@@ -9,6 +9,11 @@ const formSchema = new mongoose.Schema(
     },
     title: { type: String, required: true },
     description: { type: String },
+    visibility: {
+      type: String,
+      enum: ["public", "private"], // visibility can be either "public" or "private"
+      default: "private", // Default visibility is "private"
+    },
     theme: { type: String },
     fields: [
       {

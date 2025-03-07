@@ -5,7 +5,7 @@ const Company = require("../models/Company");
 exports.createForm = async (req, res) => {
   const { companyId } = req.params;
   const { title, description } = req.body;
-  const userId = req.user.id; 
+  const userId = req.user.id;
   try {
     // Check if the company exists
     const company = await Company.findById(companyId);
@@ -16,15 +16,13 @@ exports.createForm = async (req, res) => {
     // Check if the form with the same title already exists within the same company
     const existingForm = await Form.findOne({
       title,
-      _id: { $in: company.forms }, 
+      _id: { $in: company.forms },
     });
 
     if (existingForm) {
-      return res
-        .status(400)
-        .json({
-          error: "A form with this title already exists in the same company.",
-        });
+      return res.status(400).json({
+        error: "A form with this title already exists in the same company.",
+      });
     }
 
     // Create the new form with the user_id field
@@ -56,7 +54,6 @@ exports.createForm = async (req, res) => {
     });
   }
 };
-
 
 // Get All Forms for a Company
 exports.getCompanyForms = async (req, res) => {
@@ -287,6 +284,39 @@ exports.updateFieldStyle = async (req, res) => {
     });
   } catch (err) {
     console.error("Error updating field style:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+// Update form visibility
+exports.updateFormVisibility = async (req, res) => {
+  const { formId } = req.params;
+  const { visibility } = req.body;
+
+  try {
+    // Validate visibility value
+    const validVisibilities = ["public", "private"];
+    if (!validVisibilities.includes(visibility)) {
+      return res.status(400).json({ message: "Invalid visibility value." });
+    }
+
+    // Update the form's visibility
+    const updatedForm = await Form.findByIdAndUpdate(
+      formId,
+      { $set: { visibility } },
+      { new: true } // Return the updated form
+    );
+
+    if (!updatedForm) {
+      return res.status(404).json({ message: "Form not found" });
+    }
+
+    res.status(200).json({
+      message: `Form visibility updated to ${visibility}`,
+      form: updatedForm,
+    });
+  } catch (err) {
+    console.error("Error updating form visibility:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
