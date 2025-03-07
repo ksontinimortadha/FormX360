@@ -1,7 +1,12 @@
 import React from "react";
 import { Alert, Card, Spinner } from "react-bootstrap";
 
-function FormPreview({ selectedTheme, loading, error, renderFormFields }) {
+function FormPreview({
+  selectedTheme,
+  loading,
+  error,
+  renderFormFields,
+}) {
   return (
     <div
       className="form-preview-container flex-grow-1 mr-4"

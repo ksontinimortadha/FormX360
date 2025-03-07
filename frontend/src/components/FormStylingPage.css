@@ -205,7 +205,6 @@ select {
   margin: 10px 0;
   font-size: 16px;
   border: 1px solid #ddd;
-  border-radius: 8px;
   width: 100%;
 }
 
@@ -273,7 +272,7 @@ textarea {
   align-items: flex-start; /* Align content to the left */
 }
 
-.field-middle {
+.field-center {
   align-items: center; /* Center content */
 }
 
@@ -289,49 +288,83 @@ textarea {
   font-size: 14px;
 }
 
-/* Input field styles */
-input[type="text"],
-input[type="number"],
-input[type="date"],
-input[type="file"],
-input[type="checkbox-group"],
-input[type="radip-group"],
-input[type="radio"],
-input[type="hidden"] {
-  padding: 8px;
-  width: 100%; /* Ensure inputs take up the full width of the parent */
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="radio"]:focus,
+input[type="checkbox"]:focus {
+  outline: none;
+  border-color: #007aff; /* iOS blue border color when focused */
+  box-shadow: 0 0 8px rgba(0, 122, 255, 0.2); /* Soft shadow for focus state */
 }
 
 /* Textarea specific styles */
 textarea {
-  padding: 8px;
+  padding: 12px 16px;
   font-size: 16px;
-  width: 100%; /* Ensure textarea takes up the full width of the parent */
-  min-height: 100px;
+  width: 100%;
+  min-height: 120px;
+  border-radius: 12px;
+  border: 1px solid #d1d1d6;
+  background-color: white;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #007aff;
+  box-shadow: 0 0 8px rgba(0, 122, 255, 0.2);
 }
 
 /* Select field specific styles */
 select {
-  width: 100%; /* Ensure select takes up the full width of the parent */
+  padding: 12px 16px;
+  font-size: 16px;
+  width: 100%;
+  border: 1px solid #d1d1d6;
+  background-color: white;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 122, 255, 0.2);
 }
 
 /* Button specific styles */
 button {
-  padding: 8px 16px;
+  padding: 12px 16px;
   font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #007aff;
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 /* Autocomplete input */
 input[list="autocomplete-list"] {
-  padding: 8px;
+  padding: 12px 16px;
   font-size: 16px;
-  width: 100%; /* Ensure autocomplete input takes up the full width of the parent */
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #d1d1d6;
+  background-color: white;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[list="autocomplete-list"]:focus {
+  outline: none;
+  border-color: #007aff;
+  box-shadow: 0 0 8px rgba(0, 122, 255, 0.2);
 }
 
 /* Star Rating style */
 .star-rating {
   display: flex;
+  justify-content: center;
 }
 
 .star-rating input {
@@ -339,12 +372,19 @@ input[list="autocomplete-list"] {
 }
 
 .star-rating label {
-  font-size: 24px;
+  font-size: 32px;
   cursor: pointer;
+  color: #d1d1d6; /* Gray stars */
+  transition: color 0.2s ease;
 }
 
 .star-rating input:checked ~ label {
-  color: gold;
+  color: #ffcc00; /* Gold color for checked stars */
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #ffcc00; /* Hover stars turn gold */
 }
 
 /* Additional responsive styles */
@@ -366,9 +406,10 @@ input[list="autocomplete-list"] {
 /* Move modal to the right */
 .right-modal {
   position: fixed !important;
+  margin-right: 5px;
   right: 0;
   top: 0;
-  max-width: 100%;
+  width: 400px;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;

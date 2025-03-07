@@ -9,7 +9,6 @@ import EditStyleModal from "../modals/EditStyleModal";
 const FormStylingPage = () => {
   const [formData, setFormData] = useState(null);
   const [selectedTheme, setSelectedTheme] = useState("Minimalist-white");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedField, setSelectedField] = useState(null);
@@ -27,6 +26,7 @@ const FormStylingPage = () => {
         );
         setFormData(response.data.form);
         setSelectedTheme(response.data.form.theme);
+        setFieldStyles(response.data.form.fieldStyles);
       } catch (err) {
         console.error("Error fetching form data:", err);
         setError("Error loading form. Please try again.");
@@ -47,6 +47,7 @@ const FormStylingPage = () => {
     setSelectedField(fieldIndex);
     setShowModal(true);
   };
+
   const handleStyleChange = (styleType, value) => {
     const updatedFieldStyles = { ...fieldStyles };
     updatedFieldStyles[selectedField] = {
@@ -55,13 +56,14 @@ const FormStylingPage = () => {
     };
     setFieldStyles(updatedFieldStyles);
   };
+
   // Render form fields dynamically
   const renderFormFields = () => {
     if (formData && formData.fields) {
       return formData.fields.map((field, index) => {
         const fieldStyle = fieldStyles[index] || {};
-        const placementClass = fieldStyle.placement
-          ? `field-${fieldStyle.placement}`
+        const placementClass = fieldStyle.position
+          ? `field-${fieldStyle.position}`
           : "";
 
         const fieldContent = (
@@ -112,8 +114,8 @@ const FormStylingPage = () => {
                 >
                   {field.options &&
                     field.options.map((option, idx) => (
-                      <option key={idx} value={option}>
-                        {option.value}
+                      <option key={idx} value={option.value}>
+                        {option.label}
                       </option>
                     ))}
                 </select>
@@ -122,7 +124,7 @@ const FormStylingPage = () => {
               <>
                 {field.label}
                 <textarea
-                  placeholder={field.placeholder || field.label || "Enter text"}
+                  placeholder={field.placeholder || "Enter text"}
                   style={fieldStyle}
                   onClick={() => handleFieldClick(index)}
                 />
@@ -132,9 +134,7 @@ const FormStylingPage = () => {
                 {field.label}
                 <input
                   type="text"
-                  placeholder={
-                    field.placeholder || field.label || "Start typing..."
-                  }
+                  placeholder={field.placeholder || "Start typing..."}
                   list="autocomplete-list"
                   style={fieldStyle}
                   onClick={() => handleFieldClick(index)}
@@ -159,14 +159,11 @@ const FormStylingPage = () => {
                 />
               </>
             ) : field.type === "hidden" ? (
-              <>
-                {field.label}
-                <input
-                  type="hidden"
-                  value={field.value || ""}
-                  style={fieldStyle}
-                />
-              </>
+              <input
+                type="hidden"
+                value={field.value || ""}
+                style={fieldStyle}
+              />
             ) : field.type === "header" ? (
               <h2 onClick={() => handleFieldClick(index)}>{field.label}</h2>
             ) : field.type === "paragraph" ? (
@@ -176,9 +173,7 @@ const FormStylingPage = () => {
                 {field.label}
                 <input
                   type={field.type}
-                  placeholder={
-                    field.placeholder || field.label || "Enter " + field.type
-                  }
+                  placeholder={field.placeholder || "Enter " + field.type}
                   style={fieldStyle}
                   onClick={() => handleFieldClick(index)}
                 />
@@ -209,22 +204,24 @@ const FormStylingPage = () => {
         {/* Left side: Form Preview */}
         <FormPreview
           selectedTheme={selectedTheme}
+          fieldStyles={fieldStyles}
           loading={loading}
           error={error}
           renderFormFields={renderFormFields}
         />
         {/* Right side: Theme Selector */}
         <ThemeSelector onThemeChange={handleThemeChange} />
-        {/* Modal for Styling Control */}
-        <EditStyleModal
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          fieldStyles={fieldStyles}
-          selectedField={selectedField}
-          formId={formId}
-          handleStyleChange={handleStyleChange}
-        />
       </div>
+
+      {/* Modal for Styling Control */}
+      <EditStyleModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        fieldStyles={fieldStyles}
+        selectedField={selectedField}
+        formId={formId}
+        handleStyleChange={handleStyleChange}
+      />
     </div>
   );
 };
