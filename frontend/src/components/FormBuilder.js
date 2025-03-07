@@ -142,30 +142,32 @@ const FormBuilder = () => {
         <Row>
           <Col>
             <div className="d-flex justify-content-between align-items-center mb-4">
-              <Button
-                variant="outline-secondary"
-                onClick={handleBackButtonClick}
-                disabled={isSaving}
-                className="mr-3"
-              >
-                <FaArrowLeft className="mr-2" />
-              </Button>
-              <h1 className="text-center w-100 form-builder-title">
+              <div className="d-flex align-items-center">
+                <Button
+                  variant="outline-secondary"
+                  onClick={handleBackButtonClick}
+                  disabled={isSaving}
+                  className="mr-3"
+                >
+                  <FaArrowLeft className="mr-2" />
+                </Button>
+              </div>
+              <h1 className="text-center w-100 form-builder-title mx-auto">
                 Create Your Custom Form
               </h1>
+              <div className="d-flex align-items-center">
+                <Button
+                  size="sm"
+                  onClick={() => navigate(`/form-styling/${formId}`)}
+                  className="next-step-btn mr-3"
+                >
+                  Next Step - Style your Form
+                </Button>
+              </div>
             </div>
 
             {/* Use the ProgressBarComponent here */}
             <ProgressBarComponent progress={progress} />
-
-            <Button
-              variant="success"
-              size="sm"
-              onClick={() => navigate(`/form-styling/${formId}`)}
-              className="next-step-btn"
-            >
-              Next Step - Style your Form
-            </Button>
 
             <Card className="shadow-lg border-0 rounded-4 custom-card">
               <Card.Body className="p-3">

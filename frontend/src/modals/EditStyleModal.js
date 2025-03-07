@@ -71,11 +71,28 @@ function EditStyleModal({
         return;
       }
 
-      const dataToUpdate = {
-        backgroundColor: updatedStyles.backgroundColor,
-        color: updatedStyles.color,
-        position: updatedStyles.position,
-      };
+      // Prepare the data to update only the changed properties
+      const dataToUpdate = {};
+
+      // Conditionally add properties to dataToUpdate if they are changed
+      if (updatedStyles.backgroundColor) {
+        dataToUpdate.backgroundColor = updatedStyles.backgroundColor;
+      }
+      if (updatedStyles.color) {
+        dataToUpdate.color = updatedStyles.color;
+      }
+      if (updatedStyles.position) {
+        dataToUpdate.position = updatedStyles.position;
+      }
+
+      // If no properties to update, show an error or return early
+      if (Object.keys(dataToUpdate).length === 0) {
+        setError("No changes made to the field styles.");
+        setIsSaving(false);
+        return;
+      }
+
+      // Send the request to update the styles
       const response = await axios.put(
         `https://formx360.onrender.com/forms/${formId}/fields/${selectedField}/style`,
         dataToUpdate
@@ -94,6 +111,7 @@ function EditStyleModal({
       setIsSaving(false);
     }
   };
+
 
 {  /*const resetToCurrentTheme = async () => {
     if (selectedField && formId) {

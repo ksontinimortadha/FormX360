@@ -365,7 +365,7 @@ function Dashboard() {
       </div>
       <EditCompanyModal
         show={showEditCompanyModal}
-        onHide={handleCloseEditCompanyModal}
+        handleClose={handleCloseEditCompanyModal}
         companyDetails={companyDetails}
         setCompanyDetails={setCompanyDetails}
         handleEditCompany={handleEditCompany}

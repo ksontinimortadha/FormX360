@@ -269,7 +269,8 @@ textarea {
 }
 
 .field-left {
-  align-items: flex-start; /* Align content to the left */
+  align-items: flex-start;
+  width: 100%; /* Ensure fields take full width */
 }
 
 .field-center {
@@ -294,7 +295,6 @@ input[type="date"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
   outline: none;
-  border-color: #007aff; /* iOS blue border color when focused */
   box-shadow: 0 0 8px rgba(0, 122, 255, 0.2); /* Soft shadow for focus state */
 }
 
@@ -312,7 +312,6 @@ textarea {
 
 textarea:focus {
   outline: none;
-  border-color: #007aff;
   box-shadow: 0 0 8px rgba(0, 122, 255, 0.2);
 }
 
@@ -357,7 +356,6 @@ input[list="autocomplete-list"] {
 
 input[list="autocomplete-list"]:focus {
   outline: none;
-  border-color: #007aff;
   box-shadow: 0 0 8px rgba(0, 122, 255, 0.2);
 }
 

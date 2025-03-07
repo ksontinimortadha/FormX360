@@ -27,6 +27,8 @@ const FormStylingPage = () => {
         setFormData(response.data.form);
         setSelectedTheme(response.data.form.theme);
         setFieldStyles(response.data.form.fieldStyles);
+        console.log("form ", response.data.form);
+        console.log("button ", response.data.form.fields.access);
       } catch (err) {
         console.error("Error fetching form data:", err);
         setError("Error loading form. Please try again.");
@@ -65,7 +67,7 @@ const FormStylingPage = () => {
         const placementClass = fieldStyle.position
           ? `field-${fieldStyle.position}`
           : "";
-        console.log(fieldStyle);
+
         const fieldContent = (
           <>
             {/* Render checkbox or radio group */}

@@ -154,11 +154,19 @@ const PreviewPage = () => {
 
         return (
           <div
-            key={index}
-            className={`form-field ${placementClass}${selectedTheme}`}
-            style={{ marginBottom: "20px" }} // Add margin-bottom for spacing between fields
+            className={`${selectedTheme}`}
+            style={{
+              paddingRight: "15px",
+              paddingLeft: "15px",
+            }}
           >
-            {fieldContent}
+            <div
+              key={index}
+              className={`form-field ${placementClass}`}
+              style={{ marginBottom: "10px" }} 
+            >
+              {fieldContent}
+            </div>
           </div>
         );
       });

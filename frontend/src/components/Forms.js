@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Button, Card } from "react-bootstrap";
+import { Container, Row, Col, Button, Card, Dropdown } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FaPencilAlt, FaTrash, FaPlus } from "react-icons/fa";
+import { FaPencilAlt, FaTrash, FaPlus, FaEllipsisV } from "react-icons/fa";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,11 +11,13 @@ import AddFormModal from "../modals/AddFormModal";
 import NavbarComponent from "./NavbarComponent";
 import logo from "../images/logo.png";
 import DeleteFormModal from "../modals/DeleteFormModal";
+import ChangeVisibilityModal from "../modals/ChangeVisibilityModal";
 
 function Forms() {
   const [forms, setForms] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showVisibilityModal, setShowVisibilityModal] = useState(false);
   const [formToEdit, setFormToEdit] = useState(null);
   const [companyId, setCompanyId] = useState("");
   const navigate = useNavigate();
@@ -59,6 +61,35 @@ function Forms() {
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
+ const handleShowVisibilityModal = (form) => {
+   setFormToEdit(form);
+   setShowVisibilityModal(true); // Open the visibility modal
+ };
+
+ const handleCloseVisibilityModal = () => setShowVisibilityModal(false);
+
+ const handleVisibilityChange = async (form) => {
+   try {
+     const newVisibility = form.visibility === "public" ? "private" : "public";
+     await axios.put(
+       `https://formx360.onrender.com/forms/${form._id}/visibility`,
+       { visibility: newVisibility }
+     );
+
+     setForms((prevForms) =>
+       prevForms.map((f) =>
+         f._id === form._id ? { ...f, visibility: newVisibility } : f
+       )
+     );
+
+     toast.success(
+       `Form is now ${newVisibility === "public" ? "public" : "private"}`
+     );
+   } catch (error) {
+     toast.error("Failed to update visibility.");
+   }
+ };
+
   return (
     <div>
       <NavbarComponent logo={logo} handleLogout={handleLogout} />
@@ -90,7 +121,7 @@ function Forms() {
                           <Card.Title>{form.title}</Card.Title>
                           <Card.Text>{form.description}</Card.Text>
                         </div>
-                        <div>
+                        <div className="d-flex align-items-center">
                           <Button
                             variant="secondary"
                             onClick={() => handleEditForm(form)}
@@ -104,6 +135,64 @@ function Forms() {
                           >
                             <FaTrash size={16} />
                           </Button>
+
+                          {/* Dropdown for form settings */}
+                          <Dropdown align="end" className="ms-2">
+                            <Dropdown.Toggle
+                              variant="link"
+                              id="dropdown-custom-components"
+                              style={{ color: "black" }}
+                            >
+                              <FaEllipsisV
+                                size={16}
+                                style={{ color: "black" }}
+                              />
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              {/* Visibility Settings */}
+                              <Dropdown.Item
+                                onClick={() => handleShowVisibilityModal(form)}
+                              >
+                                Visibility Settings
+                              </Dropdown.Item>
+
+                              {/* Responses */}
+                              <Dropdown.Item /* onClick={() => handleResponses(form)} */
+                              >
+                                View Responses
+                              </Dropdown.Item>
+
+                              {/* Permissions */}
+                              <Dropdown.Item /* onClick={() => handlePermissions(form)} */
+                              >
+                                Permissions
+                              </Dropdown.Item>
+
+                              {/* Duplicate Form */}
+                              <Dropdown.Item /* onClick={() => handleDuplicateForm(form)} */
+                              >
+                                Duplicate Form
+                              </Dropdown.Item>
+
+                              {/* Export Form */}
+                              <Dropdown.Item /* onClick={() => handleExportForm(form)} */
+                              >
+                                Export Form
+                              </Dropdown.Item>
+
+                              {/* Lock Form */}
+                              <Dropdown.Item /* onClick={() => handleLockForm(form)} */
+                              >
+                                Lock Form
+                              </Dropdown.Item>
+
+                              {/* Delete Form */}
+                              <Dropdown.Item className="text-danger">
+                                Delete Form
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
                         </div>
                       </Card.Body>
                     </Card>
@@ -124,6 +213,12 @@ function Forms() {
             handleClose={handleCloseDeleteModal}
             formToEdit={formToEdit}
             fetchForms={fetchForms}
+          />
+          <ChangeVisibilityModal
+            show={showVisibilityModal}
+            handleClose={handleCloseVisibilityModal}
+            fetchForms={fetchForms}
+            handleVisibilityChange={handleVisibilityChange}
           />
         </main>
         <ToastContainer />

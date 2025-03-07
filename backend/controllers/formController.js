@@ -5,10 +5,7 @@ const Company = require("../models/Company");
 exports.createForm = async (req, res) => {
   const { companyId } = req.params;
   const { title, description } = req.body;
-  const userId = req.user.id; // Get user ID from authenticated user (from the middleware)
-
-  console.log("Authenticated user ID:", userId);
-
+  const userId = req.user.id; 
   try {
     // Check if the company exists
     const company = await Company.findById(companyId);
@@ -16,12 +13,18 @@ exports.createForm = async (req, res) => {
       return res.status(404).json({ error: "Company not found." });
     }
 
-    // Check if the form with the same title already exists
-    const existingForm = await Form.findOne({ title });
+    // Check if the form with the same title already exists within the same company
+    const existingForm = await Form.findOne({
+      title,
+      _id: { $in: company.forms }, 
+    });
+
     if (existingForm) {
       return res
         .status(400)
-        .json({ error: "Form with this title already exists." });
+        .json({
+          error: "A form with this title already exists in the same company.",
+        });
     }
 
     // Create the new form with the user_id field
@@ -53,6 +56,7 @@ exports.createForm = async (req, res) => {
     });
   }
 };
+
 
 // Get All Forms for a Company
 exports.getCompanyForms = async (req, res) => {

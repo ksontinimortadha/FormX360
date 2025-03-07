@@ -36,11 +36,11 @@
 
 /* Title Input field */
 .form-title-input {
-  border-radius: 15px; 
-  border: 1px solid #d1d1d6; 
+  border-radius: 15px;
+  border: 1px solid #d1d1d6;
   padding: 14px 20px;
   font-size: 17px;
-  background-color: #f7f7f8; 
+  background-color: #f7f7f8;
   width: 75%;
   margin-right: 20px;
   transition: border-color 0.3s ease, background-color 0.3s ease,
@@ -48,9 +48,9 @@
 }
 
 .form-title-input:focus {
-  border-color: #007aff; 
-  background-color: #ffffff; 
-  box-shadow: 0 0 8px rgba(0, 122, 255, 0.4); 
+  border-color: #007aff;
+  background-color: #ffffff;
+  box-shadow: 0 0 8px rgba(0, 122, 255, 0.4);
 }
 
 /* Description Textarea */
@@ -89,9 +89,7 @@ button:disabled {
   background-color: #e0e0e0;
 }
 
-button:hover:not(:disabled) {
-  background-color: #0051a2;
-}
+
 
 button:focus {
   outline: none;
@@ -171,19 +169,18 @@ button:focus {
 /* Next Step Button */
 .next-step-btn {
   position: absolute;
-  right: 25px;
-  top: 15px;
+  right: 85px;
+  top: 40px;
   font-size: 14px;
   font-weight: 600;
   padding: 10px 18px;
-  background-color: #34c759; 
-  border-radius: 25px;
+  background-color: #2952a2;
+  border-radius: 15px;
   color: white;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .next-step-btn:hover {
-  background-color: #28a745;
   transform: scale(1.05);
 }
 
@@ -210,18 +207,18 @@ button.sm-button {
 
 /* iOS-style progress bar */
 .progress-container .progress-bar {
-  transition: width 0.4s ease-in-out; 
-  border-radius: 10px; 
+  transition: width 0.4s ease-in-out;
+  border-radius: 10px;
 }
 
 .progress-container .progress-bar-success {
-  background-color: #4caf50; 
+  background-color: #4caf50;
 }
 
 .progress-container .progress-bar-info {
-  background-color: #3498db; 
+  background-color: #3498db;
 }
 
 .progress-container .progress-bar-danger {
-  background-color: #e74c3c; 
+  background-color: #e74c3c;
 }
