@@ -26,6 +26,7 @@ const FormStylingPage = () => {
           `https://formx360.onrender.com/forms/${formId}`
         );
         setFormData(response.data.form);
+        setSelectedTheme(response.data.form.theme);
       } catch (err) {
         console.error("Error fetching form data:", err);
         setError("Error loading form. Please try again.");
@@ -37,14 +38,14 @@ const FormStylingPage = () => {
   }, [formId]);
 
   // Handle theme selection
-   const handleThemeChange = (themeClassName) => {
-     setSelectedTheme(themeClassName); 
-   };
+  const handleThemeChange = (themeClassName) => {
+    setSelectedTheme(themeClassName);
+  };
 
-  // Handle field click 
+  // Handle field click
   const handleFieldClick = (fieldIndex) => {
     setSelectedField(fieldIndex);
-    setShowModal(true); 
+    setShowModal(true);
   };
   const handleStyleChange = (styleType, value) => {
     const updatedFieldStyles = { ...fieldStyles };

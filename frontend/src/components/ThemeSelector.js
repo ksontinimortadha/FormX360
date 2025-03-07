@@ -5,10 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./FormStylingPage.css";
 import { predefinedThemes } from "./themes";
+import { toast, ToastContainer } from "react-toastify";
 
 function ThemeSelector({ onThemeChange }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState("minimalist-white");
+  const [selectedTheme, setSelectedTheme] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState(null);
 
@@ -31,58 +32,43 @@ function ThemeSelector({ onThemeChange }) {
     navigate(`/preview/${formId}`);
   };
 
- const handleSave = async () => {
-   try {
-     setIsSaving(true);
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
 
-     // Validate if selectedTheme exists
-     if (!selectedTheme) {
-       setError("Please select a theme.");
-       setIsSaving(false);
-       return;
-     }
+      // Validate if selectedTheme exists
+      if (!selectedTheme) {
+        setError("Please select a theme.");
+        setIsSaving(false);
+        return;
+      }
 
-     // Get the className of the selected theme
-     const selectedThemeClassName = predefinedThemes.find(
-       (theme) => theme.name === selectedTheme
-     )?.className;
+      // Send the selected theme to the backend
+      const response = await axios.put(
+        `https://formx360.onrender.com/forms/style/${formId}`,
+        { theme: selectedTheme }
+      );
 
-     // Validate if the className exists
-     if (!selectedThemeClassName) {
-       setError("Invalid theme selected.");
-       setIsSaving(false);
-       return;
-     }
+      // Check if the update was successful (status code 200)
+      if (response.status === 200) {
+        toast.success("Theme saved successfully!");
+      }
 
-     // Send the selected theme to the backend
-     const response = await axios.put(
-       `https://formx360.onrender.com/forms/style/${formId}`,
-       { theme: selectedThemeClassName }
-     );
+      setIsSaving(false);
+    } catch (err) {
+      console.error("Error saving theme:", err);
 
-     // Check if the update was successful (status code 200)
-     if (response.status === 200) {
-       alert("Theme saved successfully!");
-     }
+      // Check if err.response exists and log the error message from the server
+      if (err.response) {
+        console.error("Backend Error Message:", err.response.data);
+      } else {
+        console.error("Error Message:", err.message);
+      }
 
-     setIsSaving(false);
-   } catch (err) {
-     console.error("Error saving theme:", err);
-
-     // Check if err.response exists and log the error message from the server
-     if (err.response) {
-       console.error("Backend Error Message:", err.response.data);
-     } else {
-       console.error("Error Message:", err.message);
-     }
-
-     setIsSaving(false);
-     setError("Error saving theme. Please try again.");
-   }
- };
-
-
-
+      setIsSaving(false);
+      setError("Error saving theme. Please try again.");
+    }
+  };
 
   return (
     <div
@@ -156,6 +142,7 @@ function ThemeSelector({ onThemeChange }) {
           {error && <div className="error-message">{error}</div>}
         </Card.Body>
       </Card>
+      <ToastContainer />
     </div>
   );
 }
