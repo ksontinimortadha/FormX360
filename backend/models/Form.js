@@ -55,12 +55,12 @@ const formSchema = new mongoose.Schema(
         max_length: { type: Number },
         min: { type: mongoose.Schema.Types.Mixed },
         max: { type: mongoose.Schema.Types.Mixed },
-        toggle: { type: Boolean },
-        other: { type: Boolean },
+        toggle: { type: Boolean }, // For fields like checkbox with "other"
+        other: { type: Boolean }, // For checkbox options that allow other input
         maxlength: { type: Number },
         rows: { type: Number },
         step: { type: Number },
-
+        style: { type: String }, // CSS for individual field styles
         validation_rules: {
           regex: { type: String },
           regex_description: { type: String },
@@ -72,10 +72,10 @@ const formSchema = new mongoose.Schema(
           max_date: { type: Date },
           allowed_types: { type: [String], default: [] }, // File type restrictions
           max_size: { type: Number }, // Max file size in KB
-          min_selected: { type: Number }, // Min options selected
-          max_selected: { type: Number }, // Max options selected
+          min_selected: { type: Number }, // Min options selected for checkboxes/radio
+          max_selected: { type: Number }, // Max options selected for checkboxes/radio
         },
-        tooltip: { type: String }, // Tooltip text
+        tooltip: { type: String }, // Tooltip text for the field
         visibility_rules: { type: mongoose.Schema.Types.Mixed }, // Conditional visibility logic
         order: { type: Number, required: true }, // Position of the field
       },

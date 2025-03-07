@@ -76,12 +76,11 @@ function EditStyleModal({
         color: updatedStyles.color,
         position: updatedStyles.position,
       };
-
       const response = await axios.put(
         `https://formx360.onrender.com/forms/${formId}/fields/${selectedField}/style`,
         dataToUpdate
       );
-      console.log("dataToUpdate", dataToUpdate);
+
       if (response.status === 200) {
         toast.success("Field styles saved successfully!");
         onHide();
@@ -96,7 +95,7 @@ function EditStyleModal({
     }
   };
 
-  const resetToCurrentTheme = async () => {
+{  /*const resetToCurrentTheme = async () => {
     if (selectedField && formId) {
       try {
         // Fetch form data to get the current theme
@@ -113,6 +112,7 @@ function EditStyleModal({
           setUpdatedStyles({
             backgroundColor: themeStyle.backgroundColor,
             color: themeStyle.color,
+            position,
           });
         } else {
           setError("Theme not found.");
@@ -122,7 +122,7 @@ function EditStyleModal({
         setError("Failed to load current theme.");
       }
     }
-  };
+  };*/}
 
   return (
     <Modal show={show} onHide={onHide} dialogClassName="right-modal">
@@ -192,7 +192,7 @@ function EditStyleModal({
         </div>
 
         {/* Reset to Theme Button */}
-        <div className="mt-4">
+        {/*<div className="mt-4">
           <Button
             variant="secondary"
             className="w-full py-2 rounded-full text-gray-700"
@@ -200,7 +200,7 @@ function EditStyleModal({
           >
             Reset to Current Theme
           </Button>
-        </div>
+        </div>*/}
       </Modal.Body>
       <Modal.Footer className="border-0 flex justify-between px-3 pb-3">
         <Button

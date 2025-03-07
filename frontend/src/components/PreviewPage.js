@@ -8,7 +8,8 @@ const PreviewPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { formId } = useParams();
-  const [fieldStyles] = useState({});
+  const [fieldStyles, setFieldStyles] = useState({});
+  const [selectedTheme, setSelectedTheme] = useState("");
 
   useEffect(() => {
     const fetchFormData = async () => {
@@ -18,6 +19,8 @@ const PreviewPage = () => {
           `https://formx360.onrender.com/forms/${formId}`
         );
         setFormData(response.data.form);
+        setFieldStyles(response.data.form.fieldStyles);
+        setSelectedTheme(response.data.form.theme);
       } catch (err) {
         console.error("Error fetching form data:", err);
         setError("Error loading form. Please try again.");
@@ -33,20 +36,21 @@ const PreviewPage = () => {
     if (formData && formData.fields) {
       return formData.fields.map((field, index) => {
         const fieldStyle = fieldStyles[index] || {};
-        const placementClass = fieldStyle.placement
-          ? `field-${fieldStyle.placement}`
+        const placementClass = fieldStyle.position
+          ? `field-${fieldStyle.position}`
           : "";
 
         const fieldContent = (
           <>
-            {/* Checkbox and Radio Group */}
+            {/* Render checkbox or radio group */}
             {field.type === "checkbox-group" || field.type === "radio-group" ? (
-              <div>
+              <div style={{ marginBottom: "15px" }}>
                 {field.label}
                 {field.type === "checkbox-group" &&
                   field.values.map((option, i) => (
-                    <label key={i}>
+                    <label key={i} style={{ marginRight: "10px" }}>
                       <input
+                        style={fieldStyle}
                         type="checkbox"
                         name={field.name}
                         value={option.value}
@@ -54,10 +58,9 @@ const PreviewPage = () => {
                       {option.label}
                     </label>
                   ))}
-
                 {field.type === "radio-group" &&
                   field.values.map((option, i) => (
-                    <label key={i}>
+                    <label key={i} style={{ marginRight: "10px" }}>
                       <input
                         type="radio"
                         name={field.name}
@@ -68,74 +71,82 @@ const PreviewPage = () => {
                   ))}
               </div>
             ) : field.type === "button" ? (
-              <button type="button" style={fieldStyle}>
+              <button
+                type="button"
+                style={{ ...fieldStyle, marginBottom: "15px" }}
+              >
                 {field.label}
               </button>
             ) : field.type === "select" ? (
               <>
-                {field.label}
-                <select style={fieldStyle}>
-                  {field.values &&
-                    field.values.map((option, idx) => (
-                      <option key={idx} value={option}>
-                        {option.value}
-                      </option>
-                    ))}
-                </select>
+                <div style={{ marginBottom: "15px" }}>
+                  {field.label}
+                  <select style={{ ...fieldStyle, width: "100%" }}>
+                    {field.options &&
+                      field.options.map((option, idx) => (
+                        <option key={idx} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                  </select>
+                </div>
               </>
             ) : field.type === "textarea" ? (
               <>
-                {field.label}
-                <textarea
-                  placeholder={field.placeholder || field.label || "Enter text"}
-                  style={fieldStyle}
-                />
+                <div style={{ marginBottom: "15px" }}>
+                  {field.label}
+                  <textarea
+                    placeholder={field.placeholder || "Enter text"}
+                    style={{ ...fieldStyle, width: "100%", height: "100px" }}
+                  />
+                </div>
               </>
             ) : field.type === "autocomplete" ? (
               <>
-                {field.label}
-                <input
-                  type="text"
-                  placeholder={
-                    field.placeholder || field.label || "Start typing..."
-                  }
-                  list="autocomplete-list"
-                  style={fieldStyle}
-                />
+                <div style={{ marginBottom: "15px" }}>
+                  {field.label}
+                  <input
+                    type="text"
+                    placeholder={field.placeholder || "Start typing..."}
+                    list="autocomplete-list"
+                    style={fieldStyle}
+                  />
+                </div>
               </>
             ) : field.type === "file" ? (
               <>
-                {field.label}
-                <input type="file" style={fieldStyle} />
+                <div style={{ marginBottom: "15px" }}>
+                  {field.label}
+                  <input type="file" style={fieldStyle} />
+                </div>
               </>
             ) : field.type === "date" ? (
               <>
-                {field.label}
-                <input type="date" style={fieldStyle} />
+                <div style={{ marginBottom: "15px" }}>
+                  {field.label}
+                  <input type="date" style={fieldStyle} />
+                </div>
               </>
             ) : field.type === "hidden" ? (
-              <>
-                {field.label}
-                <input
-                  type="hidden"
-                  value={field.value || ""}
-                  style={fieldStyle}
-                />
-              </>
+              <input
+                type="hidden"
+                value={field.value || ""}
+                style={fieldStyle}
+              />
             ) : field.type === "header" ? (
               <h2>{field.label}</h2>
             ) : field.type === "paragraph" ? (
               <p>{field.label}</p>
             ) : (
               <>
-                {field.label}
-                <input
-                  type={field.type}
-                  placeholder={
-                    field.placeholder || field.label || "Enter " + field.type
-                  }
-                  style={fieldStyle}
-                />
+                <div style={{ marginBottom: "15px" }}>
+                  {field.label}
+                  <input
+                    type={field.type}
+                    placeholder={field.placeholder || "Enter " + field.type}
+                    style={fieldStyle}
+                  />
+                </div>
               </>
             )}
           </>
@@ -144,8 +155,8 @@ const PreviewPage = () => {
         return (
           <div
             key={index}
-            className={`form-field ${placementClass}`}
-            style={fieldStyle}
+            className={`form-field ${placementClass}${selectedTheme}`}
+            style={{ marginBottom: "20px" }} // Add margin-bottom for spacing between fields
           >
             {fieldContent}
           </div>

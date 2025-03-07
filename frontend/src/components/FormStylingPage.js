@@ -65,7 +65,7 @@ const FormStylingPage = () => {
         const placementClass = fieldStyle.position
           ? `field-${fieldStyle.position}`
           : "";
-
+        console.log(fieldStyle);
         const fieldContent = (
           <>
             {/* Render checkbox or radio group */}
@@ -76,6 +76,7 @@ const FormStylingPage = () => {
                   field.values.map((option, i) => (
                     <label key={i}>
                       <input
+                        style={fieldStyle}
                         type="checkbox"
                         name={field.name}
                         value={option.value}
